@@ -1,6 +1,7 @@
 import React = require("react")
 import { ipcRenderer } from "electron"
 import * as Constants from './../utils/constants'
+import closeIcon from './../images/close_white.svg'
 
 const AddAgent = ({ isVisible }) => {
 
@@ -12,8 +13,8 @@ const AddAgent = ({ isVisible }) => {
         <div className="form-add-agent">
             <div className="add-agent-title">
                 <h4>Ajouter un agent</h4>
-                <button id="btn" onClick={addAgentCloseHandler}>
-                    <img src={'./../images/add_white.svg'} />
+                <button className="btn-close" id="btn" onClick={addAgentCloseHandler}>
+                    <img src={closeIcon} />
                 </button>
             </div>
 

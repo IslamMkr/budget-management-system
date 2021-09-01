@@ -30829,6 +30829,7 @@ exports.default = App;
 
 exports.__esModule = true;
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var close_white_svg_1 = __webpack_require__(/*! ./../images/close_white.svg */ "./src/images/close_white.svg");
 var AddAgent = function (_a) {
     var isVisible = _a.isVisible;
     var addAgentCloseHandler = function () {
@@ -30837,8 +30838,8 @@ var AddAgent = function (_a) {
     return (React.createElement("div", { className: "form-add-agent" },
         React.createElement("div", { className: "add-agent-title" },
             React.createElement("h4", null, "Ajouter un agent"),
-            React.createElement("button", { id: "btn", onClick: addAgentCloseHandler },
-                React.createElement("img", { src: './../images/add_white.svg' }))),
+            React.createElement("button", { className: "btn-close", id: "btn", onClick: addAgentCloseHandler },
+                React.createElement("img", { src: close_white_svg_1["default"] }))),
         React.createElement("div", { className: "form-control-add-agent" },
             React.createElement("label", null, "Informations du compte"),
             React.createElement("input", { type: "text", placeholder: "Num\u00E9ro du compte" }),
@@ -30978,6 +30979,7 @@ var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var AddAgent_1 = __webpack_require__(/*! ./AddAgent */ "./src/components/AddAgent.tsx");
 var Agents = __webpack_require__(/*! ./Agents */ "./src/components/Agents.tsx").default;
 var useState = __webpack_require__(/*! react */ "./node_modules/react/index.js").useState;
+var add_white_svg_1 = __webpack_require__(/*! ./../images/add_white.svg */ "./src/images/add_white.svg");
 var AgentsBoard = function () {
     var _a = useState(false), isAddAgentVisible = _a[0], setAddAgentVisibility = _a[1];
     var addAgentHandler = function (visibility) {
@@ -30987,7 +30989,7 @@ var AgentsBoard = function () {
         React.createElement("div", { className: "page-title" },
             React.createElement("h2", null, "Liste des agents"),
             React.createElement("button", { className: "btn-img-default", id: "btn", onClick: function () { return addAgentHandler(true); } },
-                React.createElement("img", { src: './../images/add_white.svg' }))),
+                React.createElement("img", { src: add_white_svg_1["default"] }))),
         isAddAgentVisible && React.createElement(AddAgent_1["default"], { isVisible: function (visibility) { return addAgentHandler(visibility); } }),
         React.createElement("div", { className: "table" },
             React.createElement("ul", { id: "table-compte-cle" },
@@ -31353,7 +31355,7 @@ exports.default = MenuItem;
 
 exports.__esModule = true;
 var AgentsDetails_1 = __webpack_require__(/*! ./AgentsDetails */ "./src/components/AgentsDetails.tsx");
-//import printIcon from "./../images/print_white.svg"
+var print_white_svg_1 = __webpack_require__(/*! ./../images/print_white.svg */ "./src/images/print_white.svg");
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var MonthDetailBoard = function () {
     var partners = [
@@ -31380,7 +31382,7 @@ var MonthDetailBoard = function () {
                     React.createElement("option", { value: "november" }, "Novembre"),
                     React.createElement("option", { value: "december" }, "D\u00E9cembre")),
                 React.createElement("button", { className: "btn-img-default", id: "btn", onClick: function () { return printClicked(); } },
-                    React.createElement("img", { src: "./../images/print_white.svg" })))),
+                    React.createElement("img", { src: print_white_svg_1["default"] })))),
         React.createElement("div", { className: "scrollable-table" },
             React.createElement("div", { className: "table", id: "month-table" },
                 React.createElement("ul", { id: "table-compte-nom" },
@@ -31409,8 +31411,8 @@ exports.default = MonthDetailBoard;
 "use strict";
 
 exports.__esModule = true;
-//import editIcon from "./../images/edit_white.svg"
-//import deleteIcon from "./../images/delete_white.svg"
+var edit_white_svg_1 = __webpack_require__(/*! ./../images/edit_white.svg */ "./src/images/edit_white.svg");
+var delete_white_svg_1 = __webpack_require__(/*! ./../images/delete_white.svg */ "./src/images/delete_white.svg");
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var Partner = function (_a) {
     var key = _a.key, value = _a.value;
@@ -31418,9 +31420,9 @@ var Partner = function (_a) {
         React.createElement("p", null, value.name),
         React.createElement("div", null,
             React.createElement("button", { className: "btn-edit", id: "btn" },
-                React.createElement("img", { src: "./../images/edit_white.svg" })),
+                React.createElement("img", { src: edit_white_svg_1["default"] })),
             React.createElement("button", { className: "btn-delete", id: "btn" },
-                React.createElement("img", { src: "./../images/delete_white.svg" })))));
+                React.createElement("img", { src: delete_white_svg_1["default"] })))));
 };
 exports.default = Partner;
 
@@ -31495,8 +31497,8 @@ exports.default = SearchBoard;
 
 exports.__esModule = true;
 var Partners_1 = __webpack_require__(/*! ./Partners */ "./src/components/Partners.tsx");
-//import addIcon from "./../images/add_white.svg"
-//import editIcon from "./../images/edit_white.svg"
+var add_white_svg_1 = __webpack_require__(/*! ./../images/add_white.svg */ "./src/images/add_white.svg");
+var edit_white_svg_1 = __webpack_require__(/*! ./../images/edit_white.svg */ "./src/images/edit_white.svg");
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var SettingsBoard = function () {
     return (React.createElement("div", { className: "board" },
@@ -31505,15 +31507,90 @@ var SettingsBoard = function () {
             React.createElement("p", null, "Budget des oeuvres social"),
             React.createElement("p", null, "1,650,870.00"),
             React.createElement("button", { className: "btn-edit", id: "btn" },
-                React.createElement("img", { src: "./../images/edit_white.svg" }))),
+                React.createElement("img", { src: edit_white_svg_1["default"] }))),
         React.createElement("div", { className: "page-title" },
             React.createElement("h2", null, "Liste des partenaires"),
             React.createElement("button", { className: "btn-img-default", id: "btn" },
-                React.createElement("img", { src: "./../images/add_white.svg" }))),
+                React.createElement("img", { src: add_white_svg_1["default"] }))),
         React.createElement(Partners_1["default"], null)));
 };
 exports.default = SettingsBoard;
 
+
+/***/ }),
+
+/***/ "./src/images/add_white.svg":
+/*!**********************************!*\
+  !*** ./src/images/add_white.svg ***!
+  \**********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMjRweCIgdmlld0JveD0iMCAwIDI0IDI0IiB3aWR0aD0iMjRweCIgZmlsbD0iI0ZGRkZGRiI+PHBhdGggZD0iTTAgMGgyNHYyNEgwVjB6IiBmaWxsPSJub25lIi8+PHBhdGggZD0iTTE5IDEzaC02djZoLTJ2LTZINXYtMmg2VjVoMnY2aDZ2MnoiLz48L3N2Zz4=");
+
+/***/ }),
+
+/***/ "./src/images/close_white.svg":
+/*!************************************!*\
+  !*** ./src/images/close_white.svg ***!
+  \************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMThweCIgdmlld0JveD0iMCAwIDI0IDI0IiB3aWR0aD0iMThweCIgZmlsbD0iI0ZGRkZGRiI+PHBhdGggZD0iTTAgMGgyNHYyNEgwVjB6IiBmaWxsPSJub25lIi8+PHBhdGggZD0iTTE5IDYuNDFMMTcuNTkgNSAxMiAxMC41OSA2LjQxIDUgNSA2LjQxIDEwLjU5IDEyIDUgMTcuNTkgNi40MSAxOSAxMiAxMy40MSAxNy41OSAxOSAxOSAxNy41OSAxMy40MSAxMiAxOSA2LjQxeiIvPjwvc3ZnPg==");
+
+/***/ }),
+
+/***/ "./src/images/delete_white.svg":
+/*!*************************************!*\
+  !*** ./src/images/delete_white.svg ***!
+  \*************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMjRweCIgdmlld0JveD0iMCAwIDI0IDI0IiB3aWR0aD0iMjRweCIgZmlsbD0iI0ZGRkZGRiI+PHBhdGggZD0iTTAgMGgyNHYyNEgwVjB6IiBmaWxsPSJub25lIi8+PHBhdGggZD0iTTE2IDl2MTBIOFY5aDhtLTEuNS02aC01bC0xIDFINXYyaDE0VjRoLTMuNWwtMS0xek0xOCA3SDZ2MTJjMCAxLjEuOSAyIDIgMmg4YzEuMSAwIDItLjkgMi0yVjd6Ii8+PC9zdmc+");
+
+/***/ }),
+
+/***/ "./src/images/edit_white.svg":
+/*!***********************************!*\
+  !*** ./src/images/edit_white.svg ***!
+  \***********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMjRweCIgdmlld0JveD0iMCAwIDI0IDI0IiB3aWR0aD0iMjRweCIgZmlsbD0iI0ZGRkZGRiI+PHBhdGggZD0iTTAgMGgyNHYyNEgwVjB6IiBmaWxsPSJub25lIi8+PHBhdGggZD0iTTE0LjA2IDkuMDJsLjkyLjkyTDUuOTIgMTlINXYtLjkybDkuMDYtOS4wNk0xNy42NiAzYy0uMjUgMC0uNTEuMS0uNy4yOWwtMS44MyAxLjgzIDMuNzUgMy43NSAxLjgzLTEuODNjLjM5LS4zOS4zOS0xLjAyIDAtMS40MWwtMi4zNC0yLjM0Yy0uMi0uMi0uNDUtLjI5LS43MS0uMjl6bS0zLjYgMy4xOUwzIDE3LjI1VjIxaDMuNzVMMTcuODEgOS45NGwtMy43NS0zLjc1eiIvPjwvc3ZnPg==");
+
+/***/ }),
+
+/***/ "./src/images/print_white.svg":
+/*!************************************!*\
+  !*** ./src/images/print_white.svg ***!
+  \************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMjRweCIgdmlld0JveD0iMCAwIDI0IDI0IiB3aWR0aD0iMjRweCIgZmlsbD0iI0ZGRkZGRiI+PHBhdGggZD0iTTAgMGgyNHYyNEgwVjB6IiBmaWxsPSJub25lIi8+PHBhdGggZD0iTTE5IDhoLTFWM0g2djVINWMtMS42NiAwLTMgMS4zNC0zIDN2Nmg0djRoMTJ2LTRoNHYtNmMwLTEuNjYtMS4zNC0zLTMtM3pNOCA1aDh2M0g4VjV6bTggMTJ2Mkg4di00aDh2MnptMi0ydi0ySDZ2Mkg0di00YzAtLjU1LjQ1LTEgMS0xaDE0Yy41NSAwIDEgLjQ1IDEgMXY0aC0yeiIvPjxjaXJjbGUgY3g9IjE4IiBjeT0iMTEuNSIgcj0iMSIvPjwvc3ZnPg==");
 
 /***/ })
 
@@ -31542,6 +31619,35 @@ exports.default = SettingsBoard;
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};

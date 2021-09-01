@@ -1,5 +1,5 @@
 import AgentsDetails from "./AgentsDetails"
-//import printIcon from "./../images/print_white.svg"
+import printIcon from "./../images/print_white.svg"
 import React = require("react")
 
 const MonthDetailBoard = () => {
@@ -33,7 +33,7 @@ const MonthDetailBoard = () => {
                     </select>
                     <button className="btn-img-default" id="btn"
                         onClick={() => printClicked()}>
-                        <img src="./../images/print_white.svg" />
+                        <img src={printIcon} />
                     </button>
                 </div>
             </div>

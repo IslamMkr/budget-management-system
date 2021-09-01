@@ -15,8 +15,20 @@ module.exports = [
                 },
                 {
                     test: /\.css$/i,
-                    include: __dirname + './src/style.css',
+                    include: __dirname + './src/*',
                     use: ["css-loader"],
+                }, 
+                {
+                    test: /\.(png|jpg|gif|svg)$/i,
+                    include: __dirname + "./src/*/**",
+                    use: [
+                      {
+                        loader: 'url-loader',
+                        options: {
+                          limit: 8192,
+                        }
+                      }
+                    ]
                 }
             ]
         },
@@ -43,6 +55,17 @@ module.exports = [
                 {
                     test: /\.css$/i,
                     use: [{ loader: 'css-loader' }]
+                }, 
+                {
+                    test: /\.(png|jpg|gif|svg)$/i,
+                    use: [
+                      {
+                        loader: 'url-loader',
+                        options: {
+                          limit: 8192,
+                        }
+                      }
+                    ]
                 }
             ] 
         },

@@ -371,4 +371,20 @@ button img {
 	width: 150px;
 	background: rgb(65, 156, 13);
 }
-  
+
+.btn-close {
+	width: 28px;
+	height: 28px;
+	padding: 5px;
+	border: none;
+	background: rgb(243, 67, 67);
+	border-radius: 16px;
+	align-items: center;
+}
+
+.btn-close img {
+	width: 18px;
+	height: 18px;
+	margin: 0px;
+	padding: 0px;
+}

@@ -1,10 +1,10 @@
 import React = require("react")
-//import addIcon from './../images/add_white.svg'
 import { ipcRenderer } from "electron"
 import * as Constants from './../utils/constants'
 import AddAgent from "./AddAgent"
 const { default: Agents } = require("./Agents")
 const { useState } = require("react")
+import addIcon from "./../images/add_white.svg"
  
 const AgentsBoard = () => {
 
@@ -20,7 +20,7 @@ const AgentsBoard = () => {
                 <h2>Liste des agents</h2>
                 <button className="btn-img-default" id="btn"
                     onClick={() => addAgentHandler(true)}>
-                    <img src={'./../images/add_white.svg'} />
+                    <img src={addIcon} />
                 </button>
             </div>
 

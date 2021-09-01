@@ -1,0 +1,46 @@
+{
+    "name": "ismkr",
+    "version": "1.0.0",
+    "description": "A project for my dad...",
+    "main": "src/main.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "webpack --config ./webpack.config.js",
+        "start": "npm run build && electron ./dist/main.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/IslamMkr/dads-project.git"
+    },
+    "keywords": [
+        "Electron",
+        "React",
+        "Javascript",
+        "Typescript",
+        "Desktop"
+    ],
+    "author": "Islam Mokrane",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/IslamMkr/dads-project/issues"
+    },
+    "homepage": "https://github.com/IslamMkr/dads-project#readme",
+    "devDependencies": {
+        "@types/react": "^17.0.19",
+        "@types/react-dom": "^17.0.9",
+        "css-loader": "^6.2.0",
+        "electron": "^14.0.0",
+        "html-webpack-plugin": "^5.3.2",
+        "react": "^17.0.2",
+        "react-dom": "^17.0.2",
+        "ts-loader": "^9.2.5",
+        "typescript": "^4.4.2",
+        "typings-for-css-modules-loader": "^1.7.0",
+        "webpack": "^5.51.1",
+        "webpack-cli": "^4.8.0"
+    },
+    "dependencies": {
+        "prop-types": "^15.7.2",
+        "style-loader": "^3.2.1"
+    }
+}

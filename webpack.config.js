@@ -38,7 +38,8 @@ module.exports = [
         },
         resolve: {
             extensions: ['', '.js', '.ts', '.tsx', '.json', '.wasm', '.css']
-        }
+        },
+        externals: { knex: 'commonjs knex' }
     },
     {
         mode: 'development',
@@ -80,6 +81,7 @@ module.exports = [
         ],
         resolve: {
             extensions: ['', '.js', '.ts', '.tsx', '.json', '.wasm', '.css']
-        }
+        },
+        externals: { knex: 'commonjs knex' }
     }
 ]

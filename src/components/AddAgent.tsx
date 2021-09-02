@@ -9,6 +9,13 @@ const AddAgent = ({ isVisible }) => {
         isVisible(false)   
     }
 
+    const handleAddAgent = () => {
+        // TODO: get input + send it to main process
+    }
+
+    // TODO : get the addagent response 
+    // see how its going 
+
     return (
         <div className="form-add-agent">
             <div className="add-agent-title">
@@ -35,7 +42,9 @@ const AddAgent = ({ isVisible }) => {
                 <input type="text" placeholder="Poste occupé" />
             </div>
 
-            <button className="btn" id="add-agent-button">Ajouter</button>
+            <button className="btn" 
+                id="add-agent-button"
+                onClick={handleAddAgent}>Ajouter</button>
         </div>
     )
 }

@@ -30976,6 +30976,7 @@ exports.default = Agents;
 
 exports.__esModule = true;
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var electron_1 = __webpack_require__(/*! electron */ "electron");
 var AddAgent_1 = __webpack_require__(/*! ./AddAgent */ "./src/components/AddAgent.tsx");
 var Agents = __webpack_require__(/*! ./Agents */ "./src/components/Agents.tsx").default;
 var useState = __webpack_require__(/*! react */ "./node_modules/react/index.js").useState;
@@ -30984,7 +30985,11 @@ var AgentsBoard = function () {
     var _a = useState(false), isAddAgentVisible = _a[0], setAddAgentVisibility = _a[1];
     var addAgentHandler = function (visibility) {
         setAddAgentVisibility(visibility);
+        electron_1.ipcRenderer.send('getdata', '');
     };
+    electron_1.ipcRenderer.on("data", function (event, data) {
+        console.log(data);
+    });
     return (React.createElement("div", { className: "board" },
         React.createElement("div", { className: "page-title" },
             React.createElement("h2", null, "Liste des agents"),
@@ -31591,6 +31596,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMjRweCIgdmlld0JveD0iMCAwIDI0IDI0IiB3aWR0aD0iMjRweCIgZmlsbD0iI0ZGRkZGRiI+PHBhdGggZD0iTTAgMGgyNHYyNEgwVjB6IiBmaWxsPSJub25lIi8+PHBhdGggZD0iTTE5IDhoLTFWM0g2djVINWMtMS42NiAwLTMgMS4zNC0zIDN2Nmg0djRoMTJ2LTRoNHYtNmMwLTEuNjYtMS4zNC0zLTMtM3pNOCA1aDh2M0g4VjV6bTggMTJ2Mkg4di00aDh2MnptMi0ydi0ySDZ2Mkg0di00YzAtLjU1LjQ1LTEgMS0xaDE0Yy41NSAwIDEgLjQ1IDEgMXY0aC0yeiIvPjxjaXJjbGUgY3g9IjE4IiBjeT0iMTEuNSIgcj0iMSIvPjwvc3ZnPg==");
+
+/***/ }),
+
+/***/ "electron":
+/*!***************************!*\
+  !*** external "electron" ***!
+  \***************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("electron");
 
 /***/ })
 

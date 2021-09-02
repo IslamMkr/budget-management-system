@@ -12,7 +12,12 @@ const AgentsBoard = () => {
 
     const addAgentHandler = (visibility) => {
         setAddAgentVisibility(visibility)
+        ipcRenderer.send(Constants.DB_GET_ALL_AGENTS)
     }
+
+    ipcRenderer.on("data", (event, data) => {
+        console.log(data)
+    })
 
     return (
         <div className="board">

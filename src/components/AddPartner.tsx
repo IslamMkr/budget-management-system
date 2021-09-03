@@ -33,7 +33,7 @@ const AddPartner = ({ isVisible }) => {
         }
     }
 
-    ipcRenderer.on(Constants.DB_ADD_PARTNER, (_, message) => {
+    ipcRenderer.on(Constants.DB_RESPONSE_ADD_PARTNER, (_, message) => {
         if (message == Constants.DB_OP_SUCCESS) {
             notifyUserPartnerAddedSuccessfuly()
             setPartnerName("")

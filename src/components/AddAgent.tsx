@@ -36,7 +36,7 @@ const AddAgent = ({ isVisible }) => {
         ipcRenderer.send(Constants.DB_ADD_AGENT, agent)
     }
 
-    ipcRenderer.on(Constants.DB_ADD_AGENT, (_, message) => {
+    ipcRenderer.on(Constants.DB_RESPONSE_ADD_AGENT, (_, message) => {
         if (message == Constants.DB_OP_SUCCESS) {
             notifyUserAgentAddedSuccessfuly()
             clearInput()

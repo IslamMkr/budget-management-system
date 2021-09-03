@@ -30896,7 +30896,7 @@ var AddAgent = function (_a) {
         };
         electron_1.ipcRenderer.send(Constants.DB_ADD_AGENT, agent);
     };
-    electron_1.ipcRenderer.on(Constants.DB_ADD_AGENT, function (_, message) {
+    electron_1.ipcRenderer.on(Constants.DB_RESPONSE_ADD_AGENT, function (_, message) {
         if (message == Constants.DB_OP_SUCCESS) {
             notifyUserAgentAddedSuccessfuly();
             clearInput();
@@ -31013,7 +31013,7 @@ var AddPartner = function (_a) {
             notifyUserStringIsEmpty();
         }
     };
-    electron_1.ipcRenderer.on(Constants.DB_ADD_PARTNER, function (_, message) {
+    electron_1.ipcRenderer.on(Constants.DB_RESPONSE_ADD_PARTNER, function (_, message) {
         if (message == Constants.DB_OP_SUCCESS) {
             notifyUserPartnerAddedSuccessfuly();
             setPartnerName("");
@@ -31053,7 +31053,7 @@ var AddPartner = function (_a) {
             React.createElement("button", { className: "btn", id: "add-agent-button", onClick: handleAddPartner }, "Ajouter"),
             successMessageVisibility && React.createElement("h5", null, "Partenaire ajout\u00E9 avec succ\u00E8s")),
         failureMessageVisibility && React.createElement("h5", { id: "error-msg" },
-            "Agent non ajout\u00E9 !",
+            "Partenaire non ajout\u00E9 !",
             React.createElement("br", null),
             "Partenaire avec le meme nom exist !!!"),
         errorStringIsEmpty && React.createElement("h5", { id: "error-msg" }, "Saisissez le nom du partenaire...")));
@@ -31715,7 +31715,7 @@ exports.default = SettingsBoard;
 "use strict";
 
 exports.__esModule = true;
-exports.DB_OP_FAILURE = exports.DB_OP_SUCCESS = exports.DB_ADD_PARTNER = exports.DB_ADD_AGENT = exports.DB_GET_ALL_AGENTS = exports.DB_TABLE_PARTNERS = exports.DB_TABLE_AGENTS = exports.ADD_AGENT_WINDOW_CLOSE_REQUEST = void 0;
+exports.DB_OP_FAILURE = exports.DB_OP_SUCCESS = exports.DB_RESPONSE_ADD_PARTNER = exports.DB_RESPONSE_ADD_AGENT = exports.DB_RESPONSE_GET_ALL_AGENTS = exports.DB_ADD_PARTNER = exports.DB_ADD_AGENT = exports.DB_GET_ALL_AGENTS = exports.DB_TABLE_PARTNERS = exports.DB_TABLE_AGENTS = exports.ADD_AGENT_WINDOW_CLOSE_REQUEST = void 0;
 /**
  * UI CONSTANTS
  */
@@ -31730,6 +31730,10 @@ exports.DB_TABLE_PARTNERS = 'partenaires';
 exports.DB_GET_ALL_AGENTS = "DB_GET_ALL_AGENTS";
 exports.DB_ADD_AGENT = 'DB_ADD_AGENT';
 exports.DB_ADD_PARTNER = "DB_ADD_PARTNER";
+// RESPONSES
+exports.DB_RESPONSE_GET_ALL_AGENTS = "DB_RESPONSE_GET_ALL_AGENTS";
+exports.DB_RESPONSE_ADD_AGENT = 'DB_RESPONSE_ADD_AGENT';
+exports.DB_RESPONSE_ADD_PARTNER = "DB_RESPONSE_ADD_PARTNER";
 // RESULTS
 exports.DB_OP_SUCCESS = "DB_OP_SUCCESS";
 exports.DB_OP_FAILURE = "DB_OP_FAILURE";

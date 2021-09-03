@@ -30869,6 +30869,7 @@ var electron_1 = __webpack_require__(/*! electron */ "electron");
 var Constants = __webpack_require__(/*! ./../utils/constants */ "./src/utils/constants.ts");
 var close_white_svg_1 = __webpack_require__(/*! ./../images/close_white.svg */ "./src/images/close_white.svg");
 var PropTypes = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+var DateUtils = __webpack_require__(/*! ./../utils/date */ "./src/utils/date.ts");
 var useState = __webpack_require__(/*! react */ "./node_modules/react/index.js").useState;
 var AddAgent = function (_a) {
     var isVisible = _a.isVisible;
@@ -30886,13 +30887,12 @@ var AddAgent = function (_a) {
         setSuccessMessageVisibility(false);
         setFailureMessageVisibility(false);
         var agent = {
-            aid: (Number(compte) * 100) + Number(cle),
             compte: String(compte),
             cle: String(cle),
             nom: String(nom),
             prenom: String(prenom),
             poste: String(poste),
-            timestamp: getCurrentTime()
+            timestamp: DateUtils.getCurrentTime()
         };
         electron_1.ipcRenderer.send(Constants.DB_ADD_AGENT, agent);
     };
@@ -30932,12 +30932,6 @@ var AddAgent = function (_a) {
             return [2 /*return*/];
         });
     }); };
-    var getCurrentTime = function () {
-        var now = new Date();
-        var date = now.getDate() + '/' + (now.getMonth() + 1) + '/' + now.getFullYear();
-        var time = now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds();
-        return date + '-' + time;
-    };
     // TODO : get the addagent response 
     // see how its going 
     return (React.createElement("div", { className: "form-add-agent" },
@@ -30970,12 +30964,101 @@ var AddAgent = function (_a) {
         failureMessageVisibility && React.createElement("h5", { id: "error-msg" },
             "Agent non ajout\u00E9 !",
             React.createElement("br", null),
-            "Combinaison Compte/Cl\u00E9 exist !!!")));
+            "Ce num\u00E9ro de compte exist !!!")));
 };
 AddAgent.protoTypes = {
     isVisible: PropTypes.bool.isRequired
 };
 exports.default = AddAgent;
+
+
+/***/ }),
+
+/***/ "./src/components/AddPartner.tsx":
+/*!***************************************!*\
+  !*** ./src/components/AddPartner.tsx ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+exports.__esModule = true;
+var close_white_svg_1 = __webpack_require__(/*! ./../images/close_white.svg */ "./src/images/close_white.svg");
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var react_1 = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var electron_1 = __webpack_require__(/*! electron */ "electron");
+var Constants = __webpack_require__(/*! ./../utils/constants */ "./src/utils/constants.ts");
+var DateUtils = __webpack_require__(/*! ./../utils/date */ "./src/utils/date.ts");
+var AddPartner = function (_a) {
+    var isVisible = _a.isVisible;
+    var _b = (0, react_1.useState)(""), partnerName = _b[0], setPartnerName = _b[1];
+    var _c = (0, react_1.useState)(false), successMessageVisibility = _c[0], setSuccessMessageVisibility = _c[1];
+    var _d = (0, react_1.useState)(false), failureMessageVisibility = _d[0], setFailureMessageVisibility = _d[1];
+    var _e = (0, react_1.useState)(false), errorStringIsEmpty = _e[0], setErrorStringIsEmpty = _e[1];
+    var addPartnerCloseHandler = function () {
+        isVisible(false);
+    };
+    var handleAddPartner = function () {
+        setSuccessMessageVisibility(false);
+        setFailureMessageVisibility(false);
+        setErrorStringIsEmpty(false);
+        if (partnerName.trim() != "") {
+            var partner = {
+                nom: partnerName,
+                timestamp: DateUtils.getCurrentTime()
+            };
+            electron_1.ipcRenderer.send(Constants.DB_ADD_PARTNER, partner);
+        }
+        else {
+            notifyUserStringIsEmpty();
+        }
+    };
+    electron_1.ipcRenderer.on(Constants.DB_ADD_PARTNER, function (_, message) {
+        if (message == Constants.DB_OP_SUCCESS) {
+            notifyUserPartnerAddedSuccessfuly();
+            setPartnerName("");
+        }
+        else if (message == Constants.DB_OP_FAILURE) {
+            notifyUserPartnerAddFailed();
+        }
+    });
+    var notifyUserPartnerAddFailed = function () {
+        setFailureMessageVisibility(true);
+    };
+    var notifyUserPartnerAddedSuccessfuly = function () {
+        setSuccessMessageVisibility(true);
+        var seconds = 0;
+        var interval;
+        var increment = function () {
+            seconds += 1;
+            console.log(seconds);
+            if (seconds == 3) {
+                clearInterval(interval);
+                setSuccessMessageVisibility(false);
+            }
+        };
+        interval = setInterval(increment, 1000);
+    };
+    var notifyUserStringIsEmpty = function () {
+        setErrorStringIsEmpty(true);
+    };
+    return (React.createElement("div", { className: "form-add-agent" },
+        React.createElement("div", { className: "add-agent-title" },
+            React.createElement("h4", null, "Ajouter un partenaire"),
+            React.createElement("button", { className: "btn-close", id: "btn", onClick: addPartnerCloseHandler },
+                React.createElement("img", { src: close_white_svg_1["default"] }))),
+        React.createElement("div", { className: "form-control-add-agent", id: "first-last" },
+            React.createElement("input", { type: "text", placeholder: "Nom du partenaire", value: partnerName, onChange: function (e) { setPartnerName(e.target.value); } })),
+        React.createElement("div", { className: 'btn-result' },
+            React.createElement("button", { className: "btn", id: "add-agent-button", onClick: handleAddPartner }, "Ajouter"),
+            successMessageVisibility && React.createElement("h5", null, "Partenaire ajout\u00E9 avec succ\u00E8s")),
+        failureMessageVisibility && React.createElement("h5", { id: "error-msg" },
+            "Agent non ajout\u00E9 !",
+            React.createElement("br", null),
+            "Partenaire avec le meme nom exist !!!"),
+        errorStringIsEmpty && React.createElement("h5", { id: "error-msg" }, "Saisissez le nom du partenaire...")));
+};
+exports.default = AddPartner;
 
 
 /***/ }),
@@ -31593,11 +31676,17 @@ exports.default = SearchBoard;
 "use strict";
 
 exports.__esModule = true;
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var Partners_1 = __webpack_require__(/*! ./Partners */ "./src/components/Partners.tsx");
+var AddPartner_1 = __webpack_require__(/*! ./AddPartner */ "./src/components/AddPartner.tsx");
 var add_white_svg_1 = __webpack_require__(/*! ./../images/add_white.svg */ "./src/images/add_white.svg");
 var edit_white_svg_1 = __webpack_require__(/*! ./../images/edit_white.svg */ "./src/images/edit_white.svg");
-var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var useState = __webpack_require__(/*! react */ "./node_modules/react/index.js").useState;
 var SettingsBoard = function () {
+    var _a = useState(false), isAddPartnerVisible = _a[0], setAddPartnerVisibility = _a[1];
+    var handleAddPartner = function () {
+        setAddPartnerVisibility(true);
+    };
     return (React.createElement("div", { className: "board" },
         React.createElement("h2", null, "G\u00E9n\u00E9ral"),
         React.createElement("div", { id: "setting-budget" },
@@ -31607,8 +31696,9 @@ var SettingsBoard = function () {
                 React.createElement("img", { src: edit_white_svg_1["default"] }))),
         React.createElement("div", { className: "page-title" },
             React.createElement("h2", null, "Liste des partenaires"),
-            React.createElement("button", { className: "btn-img-default", id: "btn" },
+            React.createElement("button", { className: "btn-img-default", id: "btn", onClick: handleAddPartner },
                 React.createElement("img", { src: add_white_svg_1["default"] }))),
+        isAddPartnerVisible && React.createElement(AddPartner_1["default"], { isVisible: function (visibility) { return setAddPartnerVisibility(visibility); } }),
         React.createElement(Partners_1["default"], null)));
 };
 exports.default = SettingsBoard;
@@ -31625,19 +31715,45 @@ exports.default = SettingsBoard;
 "use strict";
 
 exports.__esModule = true;
-exports.DB_OP_FAILURE = exports.DB_OP_SUCCESS = exports.DB_ADD_AGENT = exports.DB_GET_ALL_AGENTS = exports.DB_TABLE_AGENTS = exports.ADD_AGENT_WINDOW_CLOSE_REQUEST = void 0;
+exports.DB_OP_FAILURE = exports.DB_OP_SUCCESS = exports.DB_ADD_PARTNER = exports.DB_ADD_AGENT = exports.DB_GET_ALL_AGENTS = exports.DB_TABLE_PARTNERS = exports.DB_TABLE_AGENTS = exports.ADD_AGENT_WINDOW_CLOSE_REQUEST = void 0;
+/**
+ * UI CONSTANTS
+ */
 exports.ADD_AGENT_WINDOW_CLOSE_REQUEST = "ADD_AGENT_WINDOW_CLOSE_REQUEST";
 /**
  * DATABASE CONSTANTS
  */
 // TABLES
 exports.DB_TABLE_AGENTS = 'agents';
+exports.DB_TABLE_PARTNERS = 'partenaires';
 // OPERATIONS
 exports.DB_GET_ALL_AGENTS = "DB_GET_ALL_AGENTS";
 exports.DB_ADD_AGENT = 'DB_ADD_AGENT';
+exports.DB_ADD_PARTNER = "DB_ADD_PARTNER";
 // RESULTS
 exports.DB_OP_SUCCESS = "DB_OP_SUCCESS";
 exports.DB_OP_FAILURE = "DB_OP_FAILURE";
+
+
+/***/ }),
+
+/***/ "./src/utils/date.ts":
+/*!***************************!*\
+  !*** ./src/utils/date.ts ***!
+  \***************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+exports.__esModule = true;
+exports.getCurrentTime = void 0;
+var getCurrentTime = function () {
+    var now = new Date();
+    var date = now.getDate() + '/' + (now.getMonth() + 1) + '/' + now.getFullYear();
+    var time = now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds();
+    return date + '-' + time;
+};
+exports.getCurrentTime = getCurrentTime;
 
 
 /***/ }),

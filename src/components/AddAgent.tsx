@@ -3,6 +3,7 @@ import { ipcRenderer } from "electron"
 import * as Constants from './../utils/constants'
 import closeIcon from './../images/close_white.svg'
 import PropTypes = require('prop-types')
+import * as DateUtils from './../utils/date'
 const { useState } = require("react")
 
 const AddAgent = ({ isVisible }) => {
@@ -24,13 +25,12 @@ const AddAgent = ({ isVisible }) => {
         setFailureMessageVisibility(false)
 
         const agent = {
-            aid: (Number(compte) * 100) + Number(cle),
             compte: String(compte),
             cle: String(cle),
             nom: String(nom),
             prenom: String(prenom),
             poste: String(poste),
-            timestamp: getCurrentTime()
+            timestamp: DateUtils.getCurrentTime()
         }
 
         ipcRenderer.send(Constants.DB_ADD_AGENT, agent)
@@ -73,13 +73,6 @@ const AddAgent = ({ isVisible }) => {
         }
 
         interval = setInterval(increment, 1000)
-    }
-
-    const getCurrentTime = () => {
-        var now = new Date()
-        var date = now.getDate() + '/' + (now.getMonth() + 1) + '/' +now.getFullYear()
-        var time = now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
-        return date + '-' + time
     }
 
     // TODO : get the addagent response 
@@ -151,7 +144,7 @@ const AddAgent = ({ isVisible }) => {
             </div>
 
             {
-                failureMessageVisibility && <h5 id="error-msg">Agent non ajouté !<br/>Combinaison Compte/Clé exist !!!</h5>
+                failureMessageVisibility && <h5 id="error-msg">Agent non ajouté !<br/>Ce numéro de compte exist !!!</h5>
             }
         </div>
     )

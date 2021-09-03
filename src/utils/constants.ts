@@ -1,3 +1,6 @@
+/**
+ * UI CONSTANTS
+ */
 export const ADD_AGENT_WINDOW_CLOSE_REQUEST = "ADD_AGENT_WINDOW_CLOSE_REQUEST"
 
 /**
@@ -6,10 +9,12 @@ export const ADD_AGENT_WINDOW_CLOSE_REQUEST = "ADD_AGENT_WINDOW_CLOSE_REQUEST"
 
 // TABLES
 export const DB_TABLE_AGENTS = 'agents'
+export const DB_TABLE_PARTNERS = 'partenaires'
 
 // OPERATIONS
 export const DB_GET_ALL_AGENTS = "DB_GET_ALL_AGENTS"
 export const DB_ADD_AGENT = 'DB_ADD_AGENT'
+export const DB_ADD_PARTNER = "DB_ADD_PARTNER"
 
 // RESULTS
 export const DB_OP_SUCCESS = "DB_OP_SUCCESS"

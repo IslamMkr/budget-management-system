@@ -30823,18 +30823,123 @@ exports.default = App;
 /*!*************************************!*\
   !*** ./src/components/AddAgent.tsx ***!
   \*************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
 
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
 exports.__esModule = true;
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var electron_1 = __webpack_require__(/*! electron */ "electron");
+var Constants = __webpack_require__(/*! ./../utils/constants */ "./src/utils/constants.ts");
 var close_white_svg_1 = __webpack_require__(/*! ./../images/close_white.svg */ "./src/images/close_white.svg");
+var PropTypes = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+var useState = __webpack_require__(/*! react */ "./node_modules/react/index.js").useState;
 var AddAgent = function (_a) {
     var isVisible = _a.isVisible;
+    var _b = useState(""), compte = _b[0], setCompte = _b[1];
+    var _c = useState(""), cle = _c[0], setCle = _c[1];
+    var _d = useState(""), nom = _d[0], setNom = _d[1];
+    var _e = useState(""), prenom = _e[0], setPrenom = _e[1];
+    var _f = useState(""), poste = _f[0], setPoste = _f[1];
+    var _g = useState(false), successMessageVisibility = _g[0], setSuccessMessageVisibility = _g[1];
+    var _h = useState(false), failureMessageVisibility = _h[0], setFailureMessageVisibility = _h[1];
     var addAgentCloseHandler = function () {
         isVisible(false);
     };
+    var handleAddAgent = function () {
+        setSuccessMessageVisibility(false);
+        setFailureMessageVisibility(false);
+        var agent = {
+            aid: (Number(compte) * 100) + Number(cle),
+            compte: String(compte),
+            cle: String(cle),
+            nom: String(nom),
+            prenom: String(prenom),
+            poste: String(poste),
+            timestamp: getCurrentTime()
+        };
+        electron_1.ipcRenderer.send(Constants.DB_ADD_AGENT, agent);
+    };
+    electron_1.ipcRenderer.on(Constants.DB_ADD_AGENT, function (_, message) {
+        if (message == Constants.DB_OP_SUCCESS) {
+            notifyUserAgentAddedSuccessfuly();
+            clearInput();
+        }
+        else if (message == Constants.DB_OP_FAILURE) {
+            notifyUserAddFailed();
+        }
+    });
+    var notifyUserAddFailed = function () {
+        setFailureMessageVisibility(true);
+    };
+    var clearInput = function () {
+        setCompte("");
+        setCle("");
+        setNom("");
+        setPrenom("");
+        setPoste("");
+    };
+    var notifyUserAgentAddedSuccessfuly = function () { return __awaiter(void 0, void 0, void 0, function () {
+        var seconds, interval, increment;
+        return __generator(this, function (_a) {
+            setSuccessMessageVisibility(true);
+            seconds = 0;
+            increment = function () {
+                seconds += 1;
+                console.log(seconds);
+                if (seconds == 3) {
+                    clearInterval(interval);
+                    setSuccessMessageVisibility(false);
+                }
+            };
+            interval = setInterval(increment, 1000);
+            return [2 /*return*/];
+        });
+    }); };
+    var getCurrentTime = function () {
+        var now = new Date();
+        var date = now.getDate() + '/' + (now.getMonth() + 1) + '/' + now.getFullYear();
+        var time = now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds();
+        return date + '-' + time;
+    };
+    // TODO : get the addagent response 
+    // see how its going 
     return (React.createElement("div", { className: "form-add-agent" },
         React.createElement("div", { className: "add-agent-title" },
             React.createElement("h4", null, "Ajouter un agent"),
@@ -30842,16 +30947,33 @@ var AddAgent = function (_a) {
                 React.createElement("img", { src: close_white_svg_1["default"] }))),
         React.createElement("div", { className: "form-control-add-agent" },
             React.createElement("label", null, "Informations du compte"),
-            React.createElement("input", { type: "text", placeholder: "Num\u00E9ro du compte" }),
-            React.createElement("input", { type: "text", placeholder: "Cl\u00E9 du compte" })),
+            React.createElement("input", { type: "number", min: "1000", max: "9999", placeholder: "Num\u00E9ro du compte", value: compte, onChange: function (e) {
+                    if (e.target.value.length <= 4) {
+                        setCompte(e.target.value);
+                    }
+                } }),
+            React.createElement("input", { type: "number", min: "10", max: "99", placeholder: "Cl\u00E9 du compte", value: cle, onChange: function (e) {
+                    if (e.target.value.length <= 2) {
+                        setCle(e.target.value);
+                    }
+                } })),
         React.createElement("div", { className: "form-control-add-agent" },
             React.createElement("label", null, "Informations personnelles"),
-            React.createElement("input", { type: "text", placeholder: "Nom" }),
-            React.createElement("input", { type: "text", placeholder: "Pr\u00E9nom" })),
+            React.createElement("input", { type: "text", placeholder: "Nom", value: nom, onChange: function (e) { return setNom(e.target.value); } }),
+            React.createElement("input", { type: "text", placeholder: "Pr\u00E9nom", value: prenom, onChange: function (e) { return setPrenom(e.target.value); } })),
         React.createElement("div", { className: "form-control-add-agent", id: "last" },
             React.createElement("label", null, "Informations professionelles"),
-            React.createElement("input", { type: "text", placeholder: "Poste occup\u00E9" })),
-        React.createElement("button", { className: "btn", id: "add-agent-button" }, "Ajouter")));
+            React.createElement("input", { type: "text", placeholder: "Poste occup\u00E9", value: poste, onChange: function (e) { return setPoste(e.target.value); } })),
+        React.createElement("div", { className: 'btn-result' },
+            React.createElement("button", { className: "btn", id: "add-agent-button", onClick: handleAddAgent }, "Ajouter"),
+            successMessageVisibility && React.createElement("h5", null, "Agent ajout\u00E9 avec succ\u00E8s")),
+        failureMessageVisibility && React.createElement("h5", { id: "error-msg" },
+            "Agent non ajout\u00E9 !",
+            React.createElement("br", null),
+            "Combinaison Compte/Cl\u00E9 exist !!!")));
+};
+AddAgent.protoTypes = {
+    isVisible: PropTypes.bool.isRequired
 };
 exports.default = AddAgent;
 
@@ -30870,18 +30992,18 @@ exports.__esModule = true;
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var PropTypes = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
 var Agent = function (_a) {
-    var value = _a.value;
+    var agent = _a.agent;
     return (React.createElement("div", { className: "table-item" },
         React.createElement("ul", { id: "table-item-compte-cle" },
-            React.createElement("li", null, value.account),
-            React.createElement("li", null, value.key)),
+            React.createElement("li", null, agent.compte),
+            React.createElement("li", null, agent.cle)),
         React.createElement("ul", { id: "table-item-other" },
-            React.createElement("li", null, value.f_name),
-            React.createElement("li", null, value.l_name),
-            React.createElement("li", null, value.position))));
+            React.createElement("li", null, agent.nom),
+            React.createElement("li", null, agent.prenom),
+            React.createElement("li", null, agent.poste))));
 };
 Agent.propTypes = {
-    value: PropTypes.object.isRequired
+    agent: PropTypes.object.isRequired
 };
 exports.default = Agent;
 
@@ -30929,37 +31051,11 @@ exports.default = AgentDetail;
 "use strict";
 
 exports.__esModule = true;
-var react_1 = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var Agent_1 = __webpack_require__(/*! ./Agent */ "./src/components/Agent.tsx");
-var Agents = function () {
-    var _a = (0, react_1.useState)([
-        {
-            "id": "54ee5fd45ef6ze5f",
-            "account": 2457,
-            "key": 45,
-            "f_name": "Mokrane",
-            "l_name": "Islam",
-            "position": "Développeur Senior"
-        },
-        {
-            "id": "54sdezee5fdfeze5f",
-            "account": 2457,
-            "key": 45,
-            "f_name": "Mokrane",
-            "l_name": "Islam",
-            "position": "Vendeur de marchandises"
-        },
-        {
-            "id": "54ee5ffedfzefzéze5f",
-            "account": 2457,
-            "key": 45,
-            "f_name": "Mokrane",
-            "l_name": "Islam",
-            "position": "Développeur Web (MERN) FullStack"
-        }
-    ]), agents = _a[0], setAgents = _a[1];
-    return (React.createElement(React.Fragment, null, agents.map(function (agent) { return (React.createElement(Agent_1["default"], { key: agent.id, value: agent })); })));
+var Agents = function (_a) {
+    var agents = _a.agents;
+    return (React.createElement(React.Fragment, null, agents.map(function (agent) { return (React.createElement(Agent_1["default"], { key: agent.aid, agent: agent })); })));
 };
 exports.default = Agents;
 
@@ -30976,20 +31072,16 @@ exports.default = Agents;
 
 exports.__esModule = true;
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-var electron_1 = __webpack_require__(/*! electron */ "electron");
 var AddAgent_1 = __webpack_require__(/*! ./AddAgent */ "./src/components/AddAgent.tsx");
 var Agents = __webpack_require__(/*! ./Agents */ "./src/components/Agents.tsx").default;
 var useState = __webpack_require__(/*! react */ "./node_modules/react/index.js").useState;
 var add_white_svg_1 = __webpack_require__(/*! ./../images/add_white.svg */ "./src/images/add_white.svg");
 var AgentsBoard = function () {
-    var _a = useState(false), isAddAgentVisible = _a[0], setAddAgentVisibility = _a[1];
+    var _a = useState([]), agents = _a[0], setAgents = _a[1];
+    var _b = useState(false), isAddAgentVisible = _b[0], setAddAgentVisibility = _b[1];
     var addAgentHandler = function (visibility) {
         setAddAgentVisibility(visibility);
-        electron_1.ipcRenderer.send('getdata', '');
     };
-    electron_1.ipcRenderer.on("data", function (event, data) {
-        console.log(data);
-    });
     return (React.createElement("div", { className: "board" },
         React.createElement("div", { className: "page-title" },
             React.createElement("h2", null, "Liste des agents"),
@@ -31004,7 +31096,7 @@ var AgentsBoard = function () {
                 React.createElement("li", null, "Nom"),
                 React.createElement("li", null, "Pr\u00E9nom"),
                 React.createElement("li", null, "Poste"))),
-        React.createElement(Agents, null)));
+        React.createElement(Agents, { agents: agents })));
 };
 exports.default = AgentsBoard;
 
@@ -31524,6 +31616,32 @@ exports.default = SettingsBoard;
 
 /***/ }),
 
+/***/ "./src/utils/constants.ts":
+/*!********************************!*\
+  !*** ./src/utils/constants.ts ***!
+  \********************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+exports.__esModule = true;
+exports.DB_OP_FAILURE = exports.DB_OP_SUCCESS = exports.DB_ADD_AGENT = exports.DB_GET_ALL_AGENTS = exports.DB_TABLE_AGENTS = exports.ADD_AGENT_WINDOW_CLOSE_REQUEST = void 0;
+exports.ADD_AGENT_WINDOW_CLOSE_REQUEST = "ADD_AGENT_WINDOW_CLOSE_REQUEST";
+/**
+ * DATABASE CONSTANTS
+ */
+// TABLES
+exports.DB_TABLE_AGENTS = 'agents';
+// OPERATIONS
+exports.DB_GET_ALL_AGENTS = "DB_GET_ALL_AGENTS";
+exports.DB_ADD_AGENT = 'DB_ADD_AGENT';
+// RESULTS
+exports.DB_OP_SUCCESS = "DB_OP_SUCCESS";
+exports.DB_OP_FAILURE = "DB_OP_FAILURE";
+
+
+/***/ }),
+
 /***/ "./src/images/add_white.svg":
 /*!**********************************!*\
   !*** ./src/images/add_white.svg ***!
@@ -31630,7 +31748,7 @@ module.exports = require("electron");
 /******/ 		};
 /******/ 	
 /******/ 		// Execute the module function
-/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 		__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
 /******/ 	
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;

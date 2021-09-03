@@ -49,35 +49,35 @@ app.on('window-all-closed', function () {
 })
 
 ipcMain.on(Constants.DB_GET_ALL_AGENTS, (event) => {
-    const allAgents = getAllAgents()
-    event.reply(Constants.DB_GET_ALL_AGENTS, allAgents)
+    getAllAgents(event)
 })
 
 ipcMain.on(Constants.DB_ADD_AGENT, (event, agent) => {
-    const res = addAgent(agent)
-    res.then(() => {
-        event.reply(Constants.DB_ADD_AGENT, "success")
-    })
+    addAgent(event, agent)
 })
 
 /**
  * Database operations
  */
 
-const getAllAgents = async () => {
-    let allAgents
+const getAllAgents = (event) => {
     database.select()
         .from('agents')
         .then(data => {
-            allAgents = data
+            event.reply(Constants.DB_GET_ALL_AGENTS, data)
+        }).catch((err) => {
+            console.error(err)
         })
-    return allAgents
 }
 
-const addAgent = async (agent) => {
+const addAgent = (event, agent) => {
     return database(Constants.DB_TABLE_AGENTS)
         .insert(agent)
+        .then(_ =>{
+            event.reply(Constants.DB_ADD_AGENT, Constants.DB_OP_SUCCESS)
+        })
         .catch((err) => {
-            console.log(err)
+            event.reply(Constants.DB_ADD_AGENT, Constants.DB_OP_FAILURE)
+            console.error(err)
         })
 }

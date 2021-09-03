@@ -7,17 +7,13 @@ const { useState } = require("react")
 import addIcon from "./../images/add_white.svg"
  
 const AgentsBoard = () => {
+    const [agents, setAgents] = useState([])
 
     const [isAddAgentVisible, setAddAgentVisibility] = useState(false)
 
-    const addAgentHandler = (visibility) => {
+    const addAgentHandler = (visibility: boolean) => {
         setAddAgentVisibility(visibility)
-        ipcRenderer.send(Constants.DB_GET_ALL_AGENTS)
     }
-
-    ipcRenderer.on("data", (event, data) => {
-        console.log(data)
-    })
 
     return (
         <div className="board">
@@ -30,7 +26,7 @@ const AgentsBoard = () => {
             </div>
 
             {
-                isAddAgentVisible && <AddAgent isVisible={(visibility) => addAgentHandler(visibility)} />
+                isAddAgentVisible && <AddAgent isVisible={(visibility: boolean) => addAgentHandler(visibility)} />
             }
 			
 			<div className="table">
@@ -45,7 +41,7 @@ const AgentsBoard = () => {
 				</ul>
 			</div>
 
-            <Agents />
+            <Agents agents={agents}/>
         </div>
     )
 }

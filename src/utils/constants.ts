@@ -10,3 +10,7 @@ export const DB_TABLE_AGENTS = 'agents'
 // OPERATIONS
 export const DB_GET_ALL_AGENTS = "DB_GET_ALL_AGENTS"
 export const DB_ADD_AGENT = 'DB_ADD_AGENT'
+
+// RESULTS
+export const DB_OP_SUCCESS = "DB_OP_SUCCESS"
+export const DB_OP_FAILURE = "DB_OP_FAILURE"

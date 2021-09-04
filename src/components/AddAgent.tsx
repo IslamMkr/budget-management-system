@@ -5,8 +5,9 @@ import closeIcon from './../images/close_white.svg'
 import PropTypes = require('prop-types')
 import * as DateUtils from './../utils/date'
 const { useState } = require("react")
+import * as database from './../database'
 
-const AddAgent = ({ isVisible }) => {
+const AddAgent = ({ isVisible, notifyDataChanged }) => {
     const [compte, setCompte] = useState("")
     const [cle, setCle] = useState("")
     const [nom, setNom] = useState("")
@@ -32,18 +33,16 @@ const AddAgent = ({ isVisible }) => {
             poste: String(poste),
             timestamp: DateUtils.getCurrentTime()
         }
-
-        ipcRenderer.send(Constants.DB_ADD_AGENT, agent)
+        
+        database.addAgent(agent)
+            .then(_ => {
+                notifyUserAgentAddedSuccessfuly()
+                clearInput()
+            })
+            .catch(err => {
+                notifyUserAddFailed()
+            })
     }
-
-    ipcRenderer.on(Constants.DB_RESPONSE_ADD_AGENT, (_, message) => {
-        if (message == Constants.DB_OP_SUCCESS) {
-            notifyUserAgentAddedSuccessfuly()
-            clearInput()
-        } else if (message == Constants.DB_OP_FAILURE) {
-            notifyUserAddFailed()
-        }
-    })
 
     const notifyUserAddFailed = () => {
         setFailureMessageVisibility(true)
@@ -59,6 +58,7 @@ const AddAgent = ({ isVisible }) => {
 
     const notifyUserAgentAddedSuccessfuly = async () => {
         setSuccessMessageVisibility(true)
+        notifyDataChanged()
 
         let seconds = 0
         let interval: NodeJS.Timeout
@@ -74,10 +74,7 @@ const AddAgent = ({ isVisible }) => {
 
         interval = setInterval(increment, 1000)
     }
-
-    // TODO : get the addagent response 
-    // see how its going 
-
+    
     return (
         <div className="form-add-agent">
             <div className="add-agent-title">
@@ -144,7 +141,7 @@ const AddAgent = ({ isVisible }) => {
             </div>
 
             {
-                failureMessageVisibility && <h5 id="error-msg">Agent non ajouté !<br/>Ce numéro de compte exist !!!</h5>
+                failureMessageVisibility && <h5 id="error-msg">Agent non ajouté !<br/>Ce numéro de compte existe déjà !</h5>
             }
         </div>
     )

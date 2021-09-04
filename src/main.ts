@@ -5,10 +5,6 @@ import * as database from './database'
 const { app, BrowserWindow } = require('electron')
 const path = require('path')
 
-/**
- * Window creation
- */
-
 function createWindow () {
     const win = new BrowserWindow({
         width: 1080,
@@ -42,14 +38,14 @@ app.on('window-all-closed', function () {
  * DATABASE CALLS
  */
 
-ipcMain.on(Constants.DB_GET_ALL_AGENTS, (event) => {
-    database.getAllAgents(event)
-})
+// ipcMain.on(Constants.DB_GET_ALL_AGENTS, (event) => {
+//     database.getAllAgents(event)
+// })
 
-ipcMain.on(Constants.DB_ADD_AGENT, (event, agent) => {
-    database.addAgent(event, agent)
-})
+// ipcMain.on(Constants.DB_ADD_AGENT, (event, agent) => {
+//     database.addAgent(event, agent)
+// })
 
-ipcMain.on(Constants.DB_ADD_PARTNER, (event, partner) => {
-    database.addPartner(event, partner)
-})
+// ipcMain.on(Constants.DB_ADD_PARTNER, (event, partner) => {
+//     database.addPartner(event, partner)
+// })

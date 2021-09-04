@@ -410,3 +410,30 @@ button img {
 	margin-top: 10px;
 	margin-bottom: 20px;
 }
+
+.delete-popup {
+	width: 400px;
+	display: flex;
+	flex-direction: column;
+	padding-bottom: 10px;
+}
+
+.delete-popup div {
+	display: flex;
+	margin-top: 10px;
+}
+
+#delete-confirmation-button {
+	margin-right: 10px;
+	background-color: rgb(243, 67, 67);
+}
+
+#delete-annulation-button {
+	color: #000;
+	background-color: #d9dedf;
+}
+
+#update-confirmation-button {
+	margin-right: 10px;
+	background-color: rgb(65, 156, 13);
+}

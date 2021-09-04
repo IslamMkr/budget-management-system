@@ -4,8 +4,9 @@ import { useState } from 'react'
 import { ipcRenderer } from 'electron'
 import * as Constants from './../utils/constants'
 import * as DateUtils from './../utils/date'
+import * as database from './../database'
 
-const AddPartner = ({ isVisible }) => {
+const AddPartner = ({ isVisible, notifyPartnersDataChanged }) => {
     const [partnerName, setPartnerName] = useState("")
     
     const [successMessageVisibility, setSuccessMessageVisibility] = useState(false)
@@ -27,20 +28,29 @@ const AddPartner = ({ isVisible }) => {
                 timestamp: DateUtils.getCurrentTime()
             }
 
-            ipcRenderer.send(Constants.DB_ADD_PARTNER, partner)
+            // ipcRenderer.send(Constants.DB_ADD_PARTNER, partner)
+            database.addPartner(partner)
+                .then(_ => {
+                    notifyUserPartnerAddedSuccessfuly()
+                    setPartnerName("")
+                    notifyPartnersDataChanged()
+                })
+                .catch(err => {
+                    notifyUserPartnerAddFailed()
+                })
         } else {
             notifyUserStringIsEmpty()
         }
     }
 
-    ipcRenderer.on(Constants.DB_RESPONSE_ADD_PARTNER, (_, message) => {
-        if (message == Constants.DB_OP_SUCCESS) {
-            notifyUserPartnerAddedSuccessfuly()
-            setPartnerName("")
-        } else if (message == Constants.DB_OP_FAILURE) {
-            notifyUserPartnerAddFailed()
-        }
-    })
+    // ipcRenderer.on(Constants.DB_RESPONSE_ADD_PARTNER, (_, message) => {
+    //     if (message == Constants.DB_OP_SUCCESS) {
+    //         notifyUserPartnerAddedSuccessfuly()
+    //         setPartnerName("")
+    //     } else if (message == Constants.DB_OP_FAILURE) {
+    //         notifyUserPartnerAddFailed()
+    //     }
+    // })
 
     const notifyUserPartnerAddFailed = () => {
         setFailureMessageVisibility(true)

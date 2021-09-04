@@ -4,13 +4,23 @@ import Partners from "./Partners"
 import AddPartner from "./AddPartner"
 import addIcon from "./../images/add_white.svg"
 import editIcon from "./../images/edit_white.svg"
-const { useState } = require("react")
+const { useState, useEffect } = require("react")
+import * as database from './../database'
 
 const SettingsBoard = () => {
     const [isAddPartnerVisible, setAddPartnerVisibility] = useState(false)
+    const [partners, setPartners] = useState([])
+
+    useEffect(() => {
+        fetchData()
+    }, [])
 
     const handleAddPartner = () => {
         setAddPartnerVisibility(true)
+    }
+
+    const fetchData = () => {
+        database.getAllPartners().then(data => setPartners(data))
     }
 
     return (
@@ -36,10 +46,10 @@ const SettingsBoard = () => {
             </div>
 
             {
-                isAddPartnerVisible && <AddPartner isVisible={(visibility: boolean) => setAddPartnerVisibility(visibility)} />
+                isAddPartnerVisible && <AddPartner isVisible={(visibility: boolean) => setAddPartnerVisibility(visibility)} notifyPartnersDataChanged={fetchData} />
             }
 
-            <Partners />
+            <Partners partners={partners} notifyDataChanged={fetchData} />
         </div>
     )
 }

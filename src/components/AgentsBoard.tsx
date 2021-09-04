@@ -3,8 +3,9 @@ import { ipcRenderer } from "electron"
 import * as Constants from './../utils/constants'
 import AddAgent from "./AddAgent"
 const { default: Agents } = require("./Agents")
-const { useState } = require("react")
+const { useState, useEffect } = require("react")
 import addIcon from "./../images/add_white.svg"
+import * as database from './../database'
  
 const AgentsBoard = () => {
     const [agents, setAgents] = useState([])
@@ -13,6 +14,32 @@ const AgentsBoard = () => {
 
     const addAgentHandler = (visibility: boolean) => {
         setAddAgentVisibility(visibility)
+    }
+
+    useEffect(() => {
+        fetchData()
+
+        // ipcRenderer.send(Constants.DB_GET_ALL_AGENTS)
+    }, [])
+
+    // ipcRenderer.on(Constants.DB_RESPONSE_GET_ALL_AGENTS, (_, agents) => {
+    //     ipcRenderer.removeAllListeners(Constants.DB_RESPONSE_GET_ALL_AGENTS)
+    //     ipcRenderer.removeAllListeners(Constants.DB_GET_ALL_AGENTS)
+    //     console.log('----------------\n', agents)
+    //     setAgents(agents)
+    // })
+
+    // const dataChanged = () => {
+    //     ipcRenderer.on(Constants.DB_RESPONSE_GET_ALL_AGENTS, (_, agents) => {
+    //         ipcRenderer.removeAllListeners(Constants.DB_RESPONSE_GET_ALL_AGENTS)
+    //         ipcRenderer.removeAllListeners(Constants.DB_GET_ALL_AGENTS)
+    //         console.log('----------------\n', agents)
+    //         setAgents(agents)
+    //     })
+    // }
+
+    const fetchData = () => {
+        database.getAllAgents().then(data => setAgents(data))
     }
 
     return (
@@ -26,7 +53,7 @@ const AgentsBoard = () => {
             </div>
 
             {
-                isAddAgentVisible && <AddAgent isVisible={(visibility: boolean) => addAgentHandler(visibility)} />
+                isAddAgentVisible && <AddAgent isVisible={(visibility: boolean) => addAgentHandler(visibility)} notifyDataChanged={fetchData}  />
             }
 			
 			<div className="table">

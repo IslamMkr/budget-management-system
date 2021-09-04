@@ -2,32 +2,13 @@ import Partner from "./Partner"
 import { useState } from "react"
 import React = require("react")
 
-const Partners = () => {
-    const [partners, setPartners] = useState([
-        {
-            "id": 45785,
-            "name": "Brandt"
-        },
-        {
-            "id": 758,
-            "name": "Samsung" 
-        }, 
-        {
-            "id": 658,
-            "name": "Articles ménages"
-        }, 
-        {
-            "id": 7859,
-            "name": "Meubles"
-        }
-    ])
-
+const Partners = ({ partners, notifyDataChanged }) => {
     return (
         <>
             {
                 partners.map (
                     partner => (
-                        <Partner key={partner.id} value={partner} />
+                        <Partner key={partner.pid} partner={partner} notifyDataChanged={notifyDataChanged} />
                     )
                 )
             }

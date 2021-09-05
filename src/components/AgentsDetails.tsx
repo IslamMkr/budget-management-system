@@ -1,225 +1,24 @@
 import AgentDetail from "./AgentDetail"
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import * as database from './../database'
 import React = require("react")
 
 const AgentsDetails = () => {
-    const [agentsDetails, setAgentsDetails] = useState([
-        {
-            "id": "54ee5fd45ef6ze5f",
-            "account": "5487/47",
-            "name": "Mokrane Islam Mohand Oulhadj Da belkassem",
-            "pretAchat": 45000,
-            "pretOrdinaire": 58100,
-            "avance": 5000
-        }, 
-        {
-            "id": "54ee5fd45ef6ze5f",
-            "account": "5487/47",
-            "name": "Mokrane Islam",
-            "pretAchat": 45000,
-            "pretOrdinaire": 58100,
-            "avance": 5000
-        }, 
-        {
-            "id": "54ee5fd45ef6ze5f",
-            "account": "5487/47",
-            "name": "Mokrane Islam",
-            "pretAchat": 45000,
-            "pretOrdinaire": 58100,
-            "avance": 5000
-        }, 
-        {
-            "id": "54ee5fd45ef6ze5f",
-            "account": "5487/47",
-            "name": "Mokrane Islam",
-            "pretAchat": 45000,
-            "pretOrdinaire": 58100,
-            "avance": 5000
-        }, 
-        {
-            "id": "54ee5fd45ef6ze5f",
-            "account": "5487/47",
-            "name": "Mokrane Islam",
-            "pretAchat": 45000,
-            "pretOrdinaire": 58100,
-            "avance": 5000
-        }, 
-        {
-            "id": "54ee5fd45ef6ze5f",
-            "account": "5487/47",
-            "name": "Mokrane Islam",
-            "pretAchat": 45000,
-            "pretOrdinaire": 58100,
-            "avance": 5000
-        }, 
-        {
-            "id": "54ee5fd45ef6ze5f",
-            "account": "5487/47",
-            "name": "Mokrane Islam",
-            "pretAchat": 45000,
-            "pretOrdinaire": 58100,
-            "avance": 5000
-        }, 
-        {
-            "id": "54ee5fd45ef6ze5f",
-            "account": "5487/47",
-            "name": "Mokrane Islam",
-            "pretAchat": 45000,
-            "pretOrdinaire": 58100,
-            "avance": 5000
-        }, 
-        {
-            "id": "54ee5fd45ef6ze5f",
-            "account": "5487/47",
-            "name": "Mokrane Islam",
-            "pretAchat": 45000,
-            "pretOrdinaire": 58100,
-            "avance": 5000
-        }, 
-        {
-            "id": "54ee5fd45ef6ze5f",
-            "account": "5487/47",
-            "name": "Mokrane Islam",
-            "pretAchat": 45000,
-            "pretOrdinaire": 58100,
-            "avance": 5000
-        }, 
-        {
-            "id": "54ee5fd45ef6ze5f",
-            "account": "5487/47",
-            "name": "Mokrane Islam",
-            "pretAchat": 45000,
-            "pretOrdinaire": 58100,
-            "avance": 5000
-        }, 
-        {
-            "id": "54ee5fd45ef6ze5f",
-            "account": "5487/47",
-            "name": "Mokrane Islam",
-            "pretAchat": 45000,
-            "pretOrdinaire": 58100,
-            "avance": 5000
-        }, 
-        {
-            "id": "54ee5fd45ef6ze5f",
-            "account": "5487/47",
-            "name": "Mokrane Islam",
-            "pretAchat": 45000,
-            "pretOrdinaire": 58100,
-            "avance": 5000
-        }, 
-        {
-            "id": "54ee5fd45ef6ze5f",
-            "account": "5487/47",
-            "name": "Mokrane Islam",
-            "pretAchat": 45000,
-            "pretOrdinaire": 58100,
-            "avance": 5000
-        }, 
-        {
-            "id": "54ee5fd45ef6ze5f",
-            "account": "5487/47",
-            "name": "Mokrane Islam",
-            "pretAchat": 45000,
-            "pretOrdinaire": 58100,
-            "avance": 5000
-        }, 
-        {
-            "id": "54ee5fd45ef6ze5f",
-            "account": "5487/47",
-            "name": "Mokrane Islam",
-            "pretAchat": 45000,
-            "pretOrdinaire": 58100,
-            "avance": 5000
-        }, 
-        {
-            "id": "54ee5fd45ef6ze5f",
-            "account": "5487/47",
-            "name": "Mokrane Islam",
-            "pretAchat": 45000,
-            "pretOrdinaire": 58100,
-            "avance": 5000
-        }, 
-        {
-            "id": "54ee5fd45ef6ze5f",
-            "account": "5487/47",
-            "name": "Mokrane Islam",
-            "pretAchat": 45000,
-            "pretOrdinaire": 58100,
-            "avance": 5000
-        }, 
-        {
-            "id": "54ee5fd45ef6ze5f",
-            "account": "5487/47",
-            "name": "Mokrane Islam",
-            "pretAchat": 45000,
-            "pretOrdinaire": 58100,
-            "avance": 5000
-        }, 
-        {
-            "id": "54ee5fd45ef6ze5f",
-            "account": "5487/47",
-            "name": "Mokrane Islam",
-            "pretAchat": 45000,
-            "pretOrdinaire": 58100,
-            "avance": 5000
-        }, 
-        {
-            "id": "54ee5fd45ef6ze5f",
-            "account": "5487/47",
-            "name": "Mokrane Islam",
-            "pretAchat": 45000,
-            "pretOrdinaire": 58100,
-            "avance": 5000
-        }, 
-        {
-            "id": "54ee5fd45ef6ze5f",
-            "account": "5487/47",
-            "name": "Mokrane Islam",
-            "pretAchat": 45000,
-            "pretOrdinaire": 58100,
-            "avance": 5000
-        }, 
-        {
-            "id": "54ee5fd45ef6ze5f",
-            "account": "5487/47",
-            "name": "Mokrane Islam",
-            "pretAchat": 45000,
-            "pretOrdinaire": 58100,
-            "avance": 5000
-        }, 
-        {
-            "id": "54ee5fd45ef6ze5f",
-            "account": "5487/47",
-            "name": "Mokrane Islam",
-            "pretAchat": 45000,
-            "pretOrdinaire": 58100,
-            "avance": 5000
-        }, 
-        {
-            "id": "54ee5fd45ef6ze5f",
-            "account": "5487/47",
-            "name": "Mokrane Islam",
-            "pretAchat": 45000,
-            "pretOrdinaire": 58100,
-            "avance": 5000
-        }, 
-        {
-            "id": "54ee5fd45ef6ze5f",
-            "account": "5487/47",
-            "name": "Mokrane Islam",
-            "pretAchat": 45000,
-            "pretOrdinaire": 58100,
-            "avance": 5000
-        }
-    ])
+
+    const [payments, setPayments] = useState([])
+    const [agents, setAgents] = useState([])
+
+    useEffect(() => {
+        database.getAgentPayments().then(payments => setPayments(payments))
+        database.getAllAgents().then(allAgents => setAgents(allAgents))
+    }, [])
 
     return (
         <>
             {
-                agentsDetails.map (
+                agents.map (
                     agent => (
-                        <AgentDetail key={agent.id} value={agent} />
+                        <AgentDetail key={agent.aid} agent={agent} payments={payments.filter(payment => payment.aid == agent.aid)} />
                     )
                 )
             }

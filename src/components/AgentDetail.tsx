@@ -1,32 +1,26 @@
 import React = require("react")
 
-const AgentDetail = ({ key, value }) => {
-
-    const calculateTotal = () => {
-        return value.pretAchat + value.pretOrdinaire + value.avance
-    }
-
+const AgentDetail = ({ agent, payments }) => {
     return (
         <div className="table-item" id="month-table">
             <ul id="table-item-compte-nom">
-                <li id="compte-num">{value.account}</li>
-                <li id="nom">{value.name}</li>
+                <li id="compte-num">{agent.compte + '/' + agent.cle}</li>
+                <li id="nom">{agent.nom + ' ' + agent.prenom}</li>
             </ul>
             <ul id="table-item-standard-details">
-                <li>{value.pretAchat}</li>
-                <li>{value.pretOrdinaire}</li>
-                <li>{value.avance}</li>
+                <li>{'10.000.00'}</li>
+                <li>{'12.00'}</li>
+                <li>{'12.00'}</li>
                 {
-                    [154, 5894, 48875, 74585].map (
-                        s => (
-                            <li>{s}</li>
-                        )
+                    // TODO : when there is no payments fix it 
+                    payments.map (
+                        pay => <li>{pay.montant}</li>
                     )
                 }
             </ul>
             
             <ul id="table-item-total">
-                <li>{calculateTotal()}</li>
+                <li>{'0.00'}</li>
             </ul>
         </div>
     )

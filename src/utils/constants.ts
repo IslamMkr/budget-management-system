@@ -10,6 +10,8 @@ export const ADD_AGENT_WINDOW_CLOSE_REQUEST = "ADD_AGENT_WINDOW_CLOSE_REQUEST"
 // TABLES
 export const DB_TABLE_AGENTS = 'agents'
 export const DB_TABLE_PARTNERS = 'partenaires'
+export const DB_TABLE_AGENTS_DETTES = 'agents_dettes'
+export const DB_TABLE_PAYMENTS = 'payments'
 
 // OPERATIONS
 export const DB_GET_ALL_AGENTS = "DB_GET_ALL_AGENTS"

@@ -31105,21 +31105,18 @@ exports.default = Agent;
 exports.__esModule = true;
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var AgentDetail = function (_a) {
-    var key = _a.key, value = _a.value;
-    var calculateTotal = function () {
-        return value.pretAchat + value.pretOrdinaire + value.avance;
-    };
+    var agent = _a.agent, payments = _a.payments;
     return (React.createElement("div", { className: "table-item", id: "month-table" },
         React.createElement("ul", { id: "table-item-compte-nom" },
-            React.createElement("li", { id: "compte-num" }, value.account),
-            React.createElement("li", { id: "nom" }, value.name)),
+            React.createElement("li", { id: "compte-num" }, agent.compte + '/' + agent.cle),
+            React.createElement("li", { id: "nom" }, agent.nom + ' ' + agent.prenom)),
         React.createElement("ul", { id: "table-item-standard-details" },
-            React.createElement("li", null, value.pretAchat),
-            React.createElement("li", null, value.pretOrdinaire),
-            React.createElement("li", null, value.avance),
-            [154, 5894, 48875, 74585].map(function (s) { return (React.createElement("li", null, s)); })),
+            React.createElement("li", null, '10.000.00'),
+            React.createElement("li", null, '12.00'),
+            React.createElement("li", null, '12.00'),
+            payments.map(function (pay) { return React.createElement("li", null, pay.montant); })),
         React.createElement("ul", { id: "table-item-total" },
-            React.createElement("li", null, calculateTotal()))));
+            React.createElement("li", null, '0.00'))));
 };
 exports.default = AgentDetail;
 
@@ -31220,219 +31217,16 @@ exports.default = AgentsBoard;
 exports.__esModule = true;
 var AgentDetail_1 = __webpack_require__(/*! ./AgentDetail */ "./src/components/AgentDetail.tsx");
 var react_1 = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var database = __webpack_require__(/*! ./../database */ "./src/database.ts");
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var AgentsDetails = function () {
-    var _a = (0, react_1.useState)([
-        {
-            "id": "54ee5fd45ef6ze5f",
-            "account": "5487/47",
-            "name": "Mokrane Islam Mohand Oulhadj Da belkassem",
-            "pretAchat": 45000,
-            "pretOrdinaire": 58100,
-            "avance": 5000
-        },
-        {
-            "id": "54ee5fd45ef6ze5f",
-            "account": "5487/47",
-            "name": "Mokrane Islam",
-            "pretAchat": 45000,
-            "pretOrdinaire": 58100,
-            "avance": 5000
-        },
-        {
-            "id": "54ee5fd45ef6ze5f",
-            "account": "5487/47",
-            "name": "Mokrane Islam",
-            "pretAchat": 45000,
-            "pretOrdinaire": 58100,
-            "avance": 5000
-        },
-        {
-            "id": "54ee5fd45ef6ze5f",
-            "account": "5487/47",
-            "name": "Mokrane Islam",
-            "pretAchat": 45000,
-            "pretOrdinaire": 58100,
-            "avance": 5000
-        },
-        {
-            "id": "54ee5fd45ef6ze5f",
-            "account": "5487/47",
-            "name": "Mokrane Islam",
-            "pretAchat": 45000,
-            "pretOrdinaire": 58100,
-            "avance": 5000
-        },
-        {
-            "id": "54ee5fd45ef6ze5f",
-            "account": "5487/47",
-            "name": "Mokrane Islam",
-            "pretAchat": 45000,
-            "pretOrdinaire": 58100,
-            "avance": 5000
-        },
-        {
-            "id": "54ee5fd45ef6ze5f",
-            "account": "5487/47",
-            "name": "Mokrane Islam",
-            "pretAchat": 45000,
-            "pretOrdinaire": 58100,
-            "avance": 5000
-        },
-        {
-            "id": "54ee5fd45ef6ze5f",
-            "account": "5487/47",
-            "name": "Mokrane Islam",
-            "pretAchat": 45000,
-            "pretOrdinaire": 58100,
-            "avance": 5000
-        },
-        {
-            "id": "54ee5fd45ef6ze5f",
-            "account": "5487/47",
-            "name": "Mokrane Islam",
-            "pretAchat": 45000,
-            "pretOrdinaire": 58100,
-            "avance": 5000
-        },
-        {
-            "id": "54ee5fd45ef6ze5f",
-            "account": "5487/47",
-            "name": "Mokrane Islam",
-            "pretAchat": 45000,
-            "pretOrdinaire": 58100,
-            "avance": 5000
-        },
-        {
-            "id": "54ee5fd45ef6ze5f",
-            "account": "5487/47",
-            "name": "Mokrane Islam",
-            "pretAchat": 45000,
-            "pretOrdinaire": 58100,
-            "avance": 5000
-        },
-        {
-            "id": "54ee5fd45ef6ze5f",
-            "account": "5487/47",
-            "name": "Mokrane Islam",
-            "pretAchat": 45000,
-            "pretOrdinaire": 58100,
-            "avance": 5000
-        },
-        {
-            "id": "54ee5fd45ef6ze5f",
-            "account": "5487/47",
-            "name": "Mokrane Islam",
-            "pretAchat": 45000,
-            "pretOrdinaire": 58100,
-            "avance": 5000
-        },
-        {
-            "id": "54ee5fd45ef6ze5f",
-            "account": "5487/47",
-            "name": "Mokrane Islam",
-            "pretAchat": 45000,
-            "pretOrdinaire": 58100,
-            "avance": 5000
-        },
-        {
-            "id": "54ee5fd45ef6ze5f",
-            "account": "5487/47",
-            "name": "Mokrane Islam",
-            "pretAchat": 45000,
-            "pretOrdinaire": 58100,
-            "avance": 5000
-        },
-        {
-            "id": "54ee5fd45ef6ze5f",
-            "account": "5487/47",
-            "name": "Mokrane Islam",
-            "pretAchat": 45000,
-            "pretOrdinaire": 58100,
-            "avance": 5000
-        },
-        {
-            "id": "54ee5fd45ef6ze5f",
-            "account": "5487/47",
-            "name": "Mokrane Islam",
-            "pretAchat": 45000,
-            "pretOrdinaire": 58100,
-            "avance": 5000
-        },
-        {
-            "id": "54ee5fd45ef6ze5f",
-            "account": "5487/47",
-            "name": "Mokrane Islam",
-            "pretAchat": 45000,
-            "pretOrdinaire": 58100,
-            "avance": 5000
-        },
-        {
-            "id": "54ee5fd45ef6ze5f",
-            "account": "5487/47",
-            "name": "Mokrane Islam",
-            "pretAchat": 45000,
-            "pretOrdinaire": 58100,
-            "avance": 5000
-        },
-        {
-            "id": "54ee5fd45ef6ze5f",
-            "account": "5487/47",
-            "name": "Mokrane Islam",
-            "pretAchat": 45000,
-            "pretOrdinaire": 58100,
-            "avance": 5000
-        },
-        {
-            "id": "54ee5fd45ef6ze5f",
-            "account": "5487/47",
-            "name": "Mokrane Islam",
-            "pretAchat": 45000,
-            "pretOrdinaire": 58100,
-            "avance": 5000
-        },
-        {
-            "id": "54ee5fd45ef6ze5f",
-            "account": "5487/47",
-            "name": "Mokrane Islam",
-            "pretAchat": 45000,
-            "pretOrdinaire": 58100,
-            "avance": 5000
-        },
-        {
-            "id": "54ee5fd45ef6ze5f",
-            "account": "5487/47",
-            "name": "Mokrane Islam",
-            "pretAchat": 45000,
-            "pretOrdinaire": 58100,
-            "avance": 5000
-        },
-        {
-            "id": "54ee5fd45ef6ze5f",
-            "account": "5487/47",
-            "name": "Mokrane Islam",
-            "pretAchat": 45000,
-            "pretOrdinaire": 58100,
-            "avance": 5000
-        },
-        {
-            "id": "54ee5fd45ef6ze5f",
-            "account": "5487/47",
-            "name": "Mokrane Islam",
-            "pretAchat": 45000,
-            "pretOrdinaire": 58100,
-            "avance": 5000
-        },
-        {
-            "id": "54ee5fd45ef6ze5f",
-            "account": "5487/47",
-            "name": "Mokrane Islam",
-            "pretAchat": 45000,
-            "pretOrdinaire": 58100,
-            "avance": 5000
-        }
-    ]), agentsDetails = _a[0], setAgentsDetails = _a[1];
-    return (React.createElement(React.Fragment, null, agentsDetails.map(function (agent) { return (React.createElement(AgentDetail_1["default"], { key: agent.id, value: agent })); })));
+    var _a = (0, react_1.useState)([]), payments = _a[0], setPayments = _a[1];
+    var _b = (0, react_1.useState)([]), agents = _b[0], setAgents = _b[1];
+    (0, react_1.useEffect)(function () {
+        database.getAgentPayments().then(function (payments) { return setPayments(payments); });
+        database.getAllAgents().then(function (allAgents) { return setAgents(allAgents); });
+    }, []);
+    return (React.createElement(React.Fragment, null, agents.map(function (agent) { return (React.createElement(AgentDetail_1["default"], { key: agent.aid, agent: agent, payments: payments.filter(function (payment) { return payment.aid == agent.aid; }) })); })));
 };
 exports.default = AgentsDetails;
 
@@ -31560,10 +31354,13 @@ exports.__esModule = true;
 var AgentsDetails_1 = __webpack_require__(/*! ./AgentsDetails */ "./src/components/AgentsDetails.tsx");
 var print_white_svg_1 = __webpack_require__(/*! ./../images/print_white.svg */ "./src/images/print_white.svg");
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var database = __webpack_require__(/*! ./../database */ "./src/database.ts");
+var _a = __webpack_require__(/*! react */ "./node_modules/react/index.js"), useState = _a.useState, useEffect = _a.useEffect;
 var MonthDetailBoard = function () {
-    var partners = [
-        "Brandt", "Samsung", "Articles ménages", "Meubles"
-    ];
+    var _a = useState([]), partners = _a[0], setPartners = _a[1];
+    useEffect(function () {
+        database.getAllPartners().then(function (partners) { return setPartners(partners); });
+    }, []);
     var printClicked = function () {
         //ipcRenderer.send("ping", "Hello finally")
     };
@@ -31595,7 +31392,7 @@ var MonthDetailBoard = function () {
                     React.createElement("li", null, "Pr\u00EAt achat"),
                     React.createElement("li", null, "Pr\u00EAt ordinaire"),
                     React.createElement("li", null, "Avances"),
-                    partners.map(function (partner) { return (React.createElement("li", null, partner)); })),
+                    partners.map(function (partner) { return (React.createElement("li", null, partner.nom)); })),
                 React.createElement("ul", { id: "table-total" },
                     React.createElement("li", null, "Total"))),
             React.createElement(AgentsDetails_1["default"], null))));
@@ -31803,9 +31600,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.updatePartner = exports.deletePartner = exports.addPartner = exports.addAgent = exports.getAllPartners = exports.getAllAgents = void 0;
+exports.getAgentPayments = exports.getPartnerWithName = exports.updatePartner = exports.deletePartner = exports.addPartner = exports.addAgent = exports.getAllPartners = exports.getAllAgents = void 0;
 var knex_1 = __webpack_require__(/*! knex */ "knex");
 var Constants = __webpack_require__(/*! ./utils/constants */ "./src/utils/constants.ts");
+var DateUtils = __webpack_require__(/*! ./utils/date */ "./src/utils/date.ts");
 var knexConfig = {
     client: 'sqlite3',
     connection: {
@@ -31850,7 +31648,8 @@ var database = (0, knex_1["default"])(knexConfig);
 var getAllAgents = function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, database.select().from(Constants.DB_TABLE_AGENTS)];
+            case 0: return [4 /*yield*/, database.select()
+                    .from(Constants.DB_TABLE_AGENTS)];
             case 1: return [2 /*return*/, _a.sent()];
         }
     });
@@ -31859,7 +31658,8 @@ exports.getAllAgents = getAllAgents;
 var getAllPartners = function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, database.select().from(Constants.DB_TABLE_PARTNERS)];
+            case 0: return [4 /*yield*/, database.select()
+                    .from(Constants.DB_TABLE_PARTNERS)];
             case 1: return [2 /*return*/, _a.sent()];
         }
     });
@@ -31868,7 +31668,8 @@ exports.getAllPartners = getAllPartners;
 var addAgent = function (agent) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, database(Constants.DB_TABLE_AGENTS).insert(agent)];
+            case 0: return [4 /*yield*/, database(Constants.DB_TABLE_AGENTS)
+                    .insert(agent)];
             case 1: return [2 /*return*/, _a.sent()];
         }
     });
@@ -31877,16 +31678,52 @@ exports.addAgent = addAgent;
 var addPartner = function (partner) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, database(Constants.DB_TABLE_PARTNERS).insert(partner)];
+            case 0: return [4 /*yield*/, database(Constants.DB_TABLE_PARTNERS)
+                    .insert(partner)
+                    .then(function (_) { return initializeDebts(partner); })];
             case 1: return [2 /*return*/, _a.sent()];
         }
     });
 }); };
 exports.addPartner = addPartner;
+var initializeDebts = function (partner) { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        (0, exports.getPartnerWithName)(partner).then(function (partnerData) {
+            (0, exports.getAllAgents)().then(function (agents) {
+                agents.forEach(function (agent) {
+                    addAgentPartnerDebt(agent, partnerData[0], 0);
+                });
+            });
+        });
+        return [2 /*return*/];
+    });
+}); };
+var addAgentPartnerDebt = function (agent, partner, ammount) { return __awaiter(void 0, void 0, void 0, function () {
+    var record;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                record = {
+                    pid: partner.pid,
+                    aid: agent.aid,
+                    montant_global: ammount,
+                    annee: DateUtils.currentYear,
+                    timestamp: DateUtils.getCurrentTime()
+                };
+                return [4 /*yield*/, database(Constants.DB_TABLE_AGENTS_DETTES)
+                        .insert(record)];
+            case 1:
+                _a.sent();
+                return [2 /*return*/];
+        }
+    });
+}); };
 var deletePartner = function (partner) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, database(Constants.DB_TABLE_PARTNERS).where('pid', partner.pid).del()];
+            case 0: return [4 /*yield*/, database(Constants.DB_TABLE_PARTNERS)
+                    .where('pid', partner.pid)
+                    .del()];
             case 1: return [2 /*return*/, _a.sent()];
         }
     });
@@ -31895,12 +31732,40 @@ exports.deletePartner = deletePartner;
 var updatePartner = function (partner, partnerName) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, database(Constants.DB_TABLE_PARTNERS).where('pid', partner.pid).update('nom', partnerName)];
+            case 0: return [4 /*yield*/, database(Constants.DB_TABLE_PARTNERS)
+                    .where('pid', partner.pid)
+                    .update('nom', partnerName)];
             case 1: return [2 /*return*/, _a.sent()];
         }
     });
 }); };
 exports.updatePartner = updatePartner;
+var getPartnerWithName = function (partner) { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, database(Constants.DB_TABLE_PARTNERS)
+                    .where("nom", partner.nom)
+                    .select()];
+            case 1: return [2 /*return*/, _a.sent()];
+        }
+    });
+}); };
+exports.getPartnerWithName = getPartnerWithName;
+var getAgentPayments = function () { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, database.select('payments.aid', 'payments.pid', 'compte', 'cle', 'agents.nom as agent_nom', 'prenom', 'partenaires.nom as partenaire_nom', 'mois', 'montant')
+                    .from(Constants.DB_TABLE_PAYMENTS)
+                    .join(Constants.DB_TABLE_PARTNERS, 'payments.pid', 'partenaires.pid')
+                    .join(Constants.DB_TABLE_AGENTS, 'payments.aid', 'agents.aid')
+                    .andWhere('payments.mois', 1)
+                    .andWhere('payments.annee', 2021)
+                    .orderBy('payments.pid')];
+            case 1: return [2 /*return*/, _a.sent()];
+        }
+    });
+}); };
+exports.getAgentPayments = getAgentPayments;
 
 
 /***/ }),
@@ -31914,7 +31779,7 @@ exports.updatePartner = updatePartner;
 "use strict";
 
 exports.__esModule = true;
-exports.DB_OP_FAILURE = exports.DB_OP_SUCCESS = exports.DB_RESPONSE_ADD_PARTNER = exports.DB_RESPONSE_ADD_AGENT = exports.DB_RESPONSE_GET_ALL_AGENTS = exports.DB_ADD_PARTNER = exports.DB_ADD_AGENT = exports.DB_GET_ALL_AGENTS = exports.DB_TABLE_PARTNERS = exports.DB_TABLE_AGENTS = exports.ADD_AGENT_WINDOW_CLOSE_REQUEST = void 0;
+exports.DB_OP_FAILURE = exports.DB_OP_SUCCESS = exports.DB_RESPONSE_ADD_PARTNER = exports.DB_RESPONSE_ADD_AGENT = exports.DB_RESPONSE_GET_ALL_AGENTS = exports.DB_ADD_PARTNER = exports.DB_ADD_AGENT = exports.DB_GET_ALL_AGENTS = exports.DB_TABLE_PAYMENTS = exports.DB_TABLE_AGENTS_DETTES = exports.DB_TABLE_PARTNERS = exports.DB_TABLE_AGENTS = exports.ADD_AGENT_WINDOW_CLOSE_REQUEST = void 0;
 /**
  * UI CONSTANTS
  */
@@ -31925,6 +31790,8 @@ exports.ADD_AGENT_WINDOW_CLOSE_REQUEST = "ADD_AGENT_WINDOW_CLOSE_REQUEST";
 // TABLES
 exports.DB_TABLE_AGENTS = 'agents';
 exports.DB_TABLE_PARTNERS = 'partenaires';
+exports.DB_TABLE_AGENTS_DETTES = 'agents_dettes';
+exports.DB_TABLE_PAYMENTS = 'payments';
 // OPERATIONS
 exports.DB_GET_ALL_AGENTS = "DB_GET_ALL_AGENTS";
 exports.DB_ADD_AGENT = 'DB_ADD_AGENT';
@@ -31949,7 +31816,8 @@ exports.DB_OP_FAILURE = "DB_OP_FAILURE";
 "use strict";
 
 exports.__esModule = true;
-exports.getCurrentTime = void 0;
+exports.currentYear = exports.getCurrentTime = void 0;
+var date = new Date();
 var getCurrentTime = function () {
     var now = new Date();
     var date = now.getDate() + '/' + (now.getMonth() + 1) + '/' + now.getFullYear();
@@ -31957,6 +31825,7 @@ var getCurrentTime = function () {
     return date + '-' + time;
 };
 exports.getCurrentTime = getCurrentTime;
+exports.currentYear = date.getFullYear();
 
 
 /***/ }),

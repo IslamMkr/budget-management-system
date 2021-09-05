@@ -1,12 +1,15 @@
 import AgentsDetails from "./AgentsDetails"
 import printIcon from "./../images/print_white.svg"
 import React = require("react")
+import * as database from './../database'
+const { useState, useEffect } = require("react")
 
 const MonthDetailBoard = () => {
+    const [partners, setPartners] = useState([])
 
-    const partners = [
-        "Brandt", "Samsung", "Articles ménages", "Meubles"
-    ]
+    useEffect(() => {
+        database.getAllPartners().then(partners => setPartners(partners))
+    }, [])
 
     const printClicked = () => {
         //ipcRenderer.send("ping", "Hello finally")
@@ -51,7 +54,7 @@ const MonthDetailBoard = () => {
                         {
                             partners.map (
                                 partner => (
-                                    <li>{partner}</li>
+                                    <li>{partner.nom}</li>
                                 )
                             )
                         }
@@ -61,7 +64,7 @@ const MonthDetailBoard = () => {
                     </ul>
                 </div>
                 
-                <AgentsDetails/>
+                <AgentsDetails />
             </div>
         </div>
     )

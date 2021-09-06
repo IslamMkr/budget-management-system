@@ -1,6 +1,4 @@
 import React = require("react")
-import { ipcRenderer } from "electron"
-import * as Constants from './../utils/constants'
 import closeIcon from './../images/close_white.svg'
 import PropTypes = require('prop-types')
 import * as DateUtils from './../utils/date'

@@ -31104,19 +31104,22 @@ exports.default = Agent;
 
 exports.__esModule = true;
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var NumberUtils = __webpack_require__(/*! ./../utils/numbers */ "./src/utils/numbers.ts");
 var AgentDetail = function (_a) {
     var agent = _a.agent, payments = _a.payments;
+    var calculateTotal = function () {
+        var total = payments.reduce(function (acc, payment) { return acc + payment.montant; }, 0);
+        return NumberUtils.formatNumberToCurrency(total);
+    };
     return (React.createElement("div", { className: "table-item", id: "month-table" },
         React.createElement("ul", { id: "table-item-compte-nom" },
             React.createElement("li", { id: "compte-num" }, agent.compte + '/' + agent.cle),
             React.createElement("li", { id: "nom" }, agent.nom + ' ' + agent.prenom)),
-        React.createElement("ul", { id: "table-item-standard-details" },
-            React.createElement("li", null, '10.000.00'),
-            React.createElement("li", null, '12.00'),
-            React.createElement("li", null, '12.00'),
-            payments.map(function (pay) { return React.createElement("li", null, pay.montant); })),
+        React.createElement("ul", { id: "table-item-standard-details" }, 
+        // TODO : when there is no payments fix it 
+        payments.map(function (pay) { return React.createElement("li", { key: pay.pid }, pay.montant == 0 ? '--' : NumberUtils.formatNumberToCurrency(pay.montant)); })),
         React.createElement("ul", { id: "table-item-total" },
-            React.createElement("li", null, '0.00'))));
+            React.createElement("li", null, calculateTotal()))));
 };
 exports.default = AgentDetail;
 
@@ -31219,11 +31222,10 @@ var AgentDetail_1 = __webpack_require__(/*! ./AgentDetail */ "./src/components/A
 var react_1 = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var database = __webpack_require__(/*! ./../database */ "./src/database.ts");
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-var AgentsDetails = function () {
-    var _a = (0, react_1.useState)([]), payments = _a[0], setPayments = _a[1];
+var AgentsDetails = function (_a) {
+    var payments = _a.payments;
     var _b = (0, react_1.useState)([]), agents = _b[0], setAgents = _b[1];
     (0, react_1.useEffect)(function () {
-        database.getAgentPayments().then(function (payments) { return setPayments(payments); });
         database.getAllAgents().then(function (allAgents) { return setAgents(allAgents); });
     }, []);
     return (React.createElement(React.Fragment, null, agents.map(function (agent) { return (React.createElement(AgentDetail_1["default"], { key: agent.aid, agent: agent, payments: payments.filter(function (payment) { return payment.aid == agent.aid; }) })); })));
@@ -31355,12 +31357,25 @@ var AgentsDetails_1 = __webpack_require__(/*! ./AgentsDetails */ "./src/componen
 var print_white_svg_1 = __webpack_require__(/*! ./../images/print_white.svg */ "./src/images/print_white.svg");
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var database = __webpack_require__(/*! ./../database */ "./src/database.ts");
+var DateUtils = __webpack_require__(/*! ./../utils/date */ "./src/utils/date.ts");
 var _a = __webpack_require__(/*! react */ "./node_modules/react/index.js"), useState = _a.useState, useEffect = _a.useEffect;
 var MonthDetailBoard = function () {
     var _a = useState([]), partners = _a[0], setPartners = _a[1];
+    var _b = useState('january'), month = _b[0], setMonth = _b[1];
+    var _c = useState([]), payments = _c[0], setPayments = _c[1];
     useEffect(function () {
         database.getAllPartners().then(function (partners) { return setPartners(partners); });
+        setMonth(DateUtils.getMonthInLetters(DateUtils.currentMonth));
+        var monthNumber = DateUtils.currentMonth;
+        var year = DateUtils.currentYear;
+        database.getAgentsPayments(monthNumber, year).then(function (payments) { return setPayments(payments); });
     }, []);
+    var handleMonthSelection = function (e) {
+        setMonth(e.target.value);
+        var monthNumber = DateUtils.getMonthInNumber(e.target.value);
+        var year = DateUtils.currentYear;
+        database.getAgentsPayments(monthNumber, year).then(function (payments) { return setPayments(payments); });
+    };
     var printClicked = function () {
         //ipcRenderer.send("ping", "Hello finally")
     };
@@ -31368,7 +31383,7 @@ var MonthDetailBoard = function () {
         React.createElement("div", { className: "page-title" },
             React.createElement("h2", null, "D\u00E9tails du mois"),
             React.createElement("div", { className: "side-menu" },
-                React.createElement("select", { id: "month-select" },
+                React.createElement("select", { id: "month-select", value: month, onChange: function (e) { return handleMonthSelection(e); } },
                     React.createElement("option", { value: "january" }, "Janvier"),
                     React.createElement("option", { value: "february" }, "F\u00E9vrier"),
                     React.createElement("option", { value: "march" }, "Mars"),
@@ -31388,14 +31403,10 @@ var MonthDetailBoard = function () {
                 React.createElement("ul", { id: "table-compte-nom" },
                     React.createElement("li", { id: "compte-num" }, "N\u00B0 Compte"),
                     React.createElement("li", { id: "nom" }, "Nom et Pr\u00E9nom")),
-                React.createElement("ul", { id: "table-standard-details" },
-                    React.createElement("li", null, "Pr\u00EAt achat"),
-                    React.createElement("li", null, "Pr\u00EAt ordinaire"),
-                    React.createElement("li", null, "Avances"),
-                    partners.map(function (partner) { return (React.createElement("li", null, partner.nom)); })),
+                React.createElement("ul", { id: "table-standard-details" }, partners.map(function (partner) { return (React.createElement("li", { key: partner.pid }, partner.nom)); })),
                 React.createElement("ul", { id: "table-total" },
                     React.createElement("li", null, "Total"))),
-            React.createElement(AgentsDetails_1["default"], null))));
+            React.createElement(AgentsDetails_1["default"], { payments: payments }))));
 };
 exports.default = MonthDetailBoard;
 
@@ -31600,7 +31611,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.getAgentPayments = exports.getPartnerWithName = exports.updatePartner = exports.deletePartner = exports.addPartner = exports.addAgent = exports.getAllPartners = exports.getAllAgents = void 0;
+exports.getAgentsPayments = exports.getPartnerWithName = exports.updatePartner = exports.deletePartner = exports.addPartner = exports.addAgent = exports.getAllPartners = exports.getAllAgents = void 0;
 var knex_1 = __webpack_require__(/*! knex */ "knex");
 var Constants = __webpack_require__(/*! ./utils/constants */ "./src/utils/constants.ts");
 var DateUtils = __webpack_require__(/*! ./utils/date */ "./src/utils/date.ts");
@@ -31669,12 +31680,38 @@ var addAgent = function (agent) { return __awaiter(void 0, void 0, void 0, funct
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, database(Constants.DB_TABLE_AGENTS)
-                    .insert(agent)];
-            case 1: return [2 /*return*/, _a.sent()];
+                    .insert(agent)
+                    .then(function (_) { return initializeAgentDebts(agent); })];
+            case 1:
+                _a.sent();
+                return [2 /*return*/];
         }
     });
 }); };
 exports.addAgent = addAgent;
+var initializeAgentDebts = function (agent) { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        getAgentWithAccountNumber(agent).then(function (agentData) {
+            (0, exports.getAllPartners)().then(function (partners) {
+                partners.forEach(function (partner) {
+                    initializeAgentPartnerDebt(agentData[0], partner);
+                    initializeAgentPartnerPayments(agentData[0], partner);
+                });
+            });
+        });
+        return [2 /*return*/];
+    });
+}); };
+var getAgentWithAccountNumber = function (agent) { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, database.select()
+                    .from(Constants.DB_TABLE_AGENTS)
+                    .where('compte', agent.compte)];
+            case 1: return [2 /*return*/, _a.sent()];
+        }
+    });
+}); };
 var addPartner = function (partner) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -31691,14 +31728,42 @@ var initializeDebts = function (partner) { return __awaiter(void 0, void 0, void
         (0, exports.getPartnerWithName)(partner).then(function (partnerData) {
             (0, exports.getAllAgents)().then(function (agents) {
                 agents.forEach(function (agent) {
-                    addAgentPartnerDebt(agent, partnerData[0], 0);
+                    initializeAgentPartnerDebt(agent, partnerData[0]);
+                    initializeAgentPartnerPayments(agent, partnerData[0]);
                 });
             });
         });
         return [2 /*return*/];
     });
 }); };
-var addAgentPartnerDebt = function (agent, partner, ammount) { return __awaiter(void 0, void 0, void 0, function () {
+var initializeAgentPartnerPayments = function (agent, partner) { return __awaiter(void 0, void 0, void 0, function () {
+    var records;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                console.log("adding payments");
+                records = [
+                    { pid: partner.pid, aid: agent.aid, montant: 0, mois: 1, annee: DateUtils.currentYear, timestamp: DateUtils.getCurrentTime() },
+                    { pid: partner.pid, aid: agent.aid, montant: 0, mois: 2, annee: DateUtils.currentYear, timestamp: DateUtils.getCurrentTime() },
+                    { pid: partner.pid, aid: agent.aid, montant: 0, mois: 3, annee: DateUtils.currentYear, timestamp: DateUtils.getCurrentTime() },
+                    { pid: partner.pid, aid: agent.aid, montant: 0, mois: 4, annee: DateUtils.currentYear, timestamp: DateUtils.getCurrentTime() },
+                    { pid: partner.pid, aid: agent.aid, montant: 0, mois: 5, annee: DateUtils.currentYear, timestamp: DateUtils.getCurrentTime() },
+                    { pid: partner.pid, aid: agent.aid, montant: 0, mois: 6, annee: DateUtils.currentYear, timestamp: DateUtils.getCurrentTime() },
+                    { pid: partner.pid, aid: agent.aid, montant: 0, mois: 7, annee: DateUtils.currentYear, timestamp: DateUtils.getCurrentTime() },
+                    { pid: partner.pid, aid: agent.aid, montant: 0, mois: 8, annee: DateUtils.currentYear, timestamp: DateUtils.getCurrentTime() },
+                    { pid: partner.pid, aid: agent.aid, montant: 0, mois: 9, annee: DateUtils.currentYear, timestamp: DateUtils.getCurrentTime() },
+                    { pid: partner.pid, aid: agent.aid, montant: 0, mois: 10, annee: DateUtils.currentYear, timestamp: DateUtils.getCurrentTime() },
+                    { pid: partner.pid, aid: agent.aid, montant: 0, mois: 11, annee: DateUtils.currentYear, timestamp: DateUtils.getCurrentTime() },
+                    { pid: partner.pid, aid: agent.aid, montant: 0, mois: 12, annee: DateUtils.currentYear, timestamp: DateUtils.getCurrentTime() }
+                ];
+                return [4 /*yield*/, database.insert(records).into(Constants.DB_TABLE_PAYMENTS)["catch"](function (err) { return console.log(err); })];
+            case 1:
+                _a.sent();
+                return [2 /*return*/];
+        }
+    });
+}); };
+var initializeAgentPartnerDebt = function (agent, partner) { return __awaiter(void 0, void 0, void 0, function () {
     var record;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -31706,7 +31771,7 @@ var addAgentPartnerDebt = function (agent, partner, ammount) { return __awaiter(
                 record = {
                     pid: partner.pid,
                     aid: agent.aid,
-                    montant_global: ammount,
+                    montant_global: 0,
                     annee: DateUtils.currentYear,
                     timestamp: DateUtils.getCurrentTime()
                 };
@@ -31723,12 +31788,46 @@ var deletePartner = function (partner) { return __awaiter(void 0, void 0, void 0
         switch (_a.label) {
             case 0: return [4 /*yield*/, database(Constants.DB_TABLE_PARTNERS)
                     .where('pid', partner.pid)
-                    .del()];
+                    .del()
+                    .then(function (_) {
+                    deletePartnerRecords(partner);
+                })];
             case 1: return [2 /*return*/, _a.sent()];
         }
     });
 }); };
 exports.deletePartner = deletePartner;
+var deletePartnerRecords = function (partner) { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        deletePartnerPaymentRecords(partner);
+        deleteAgentPartnerDebts(partner);
+        return [2 /*return*/];
+    });
+}); };
+var deletePartnerPaymentRecords = function (partner) { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, database(Constants.DB_TABLE_PAYMENTS)
+                    .where('pid', partner.pid)
+                    .del()];
+            case 1:
+                _a.sent();
+                return [2 /*return*/];
+        }
+    });
+}); };
+var deleteAgentPartnerDebts = function (partner) { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, database(Constants.DB_TABLE_AGENTS_DETTES)
+                    .where('pid', partner.pid)
+                    .del()];
+            case 1:
+                _a.sent();
+                return [2 /*return*/];
+        }
+    });
+}); };
 var updatePartner = function (partner, partnerName) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -31751,21 +31850,21 @@ var getPartnerWithName = function (partner) { return __awaiter(void 0, void 0, v
     });
 }); };
 exports.getPartnerWithName = getPartnerWithName;
-var getAgentPayments = function () { return __awaiter(void 0, void 0, void 0, function () {
+var getAgentsPayments = function (month, year) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, database.select('payments.aid', 'payments.pid', 'compte', 'cle', 'agents.nom as agent_nom', 'prenom', 'partenaires.nom as partenaire_nom', 'mois', 'montant')
                     .from(Constants.DB_TABLE_PAYMENTS)
                     .join(Constants.DB_TABLE_PARTNERS, 'payments.pid', 'partenaires.pid')
                     .join(Constants.DB_TABLE_AGENTS, 'payments.aid', 'agents.aid')
-                    .andWhere('payments.mois', 1)
-                    .andWhere('payments.annee', 2021)
+                    .andWhere('payments.mois', month)
+                    .andWhere('payments.annee', year)
                     .orderBy('payments.pid')];
             case 1: return [2 /*return*/, _a.sent()];
         }
     });
 }); };
-exports.getAgentPayments = getAgentPayments;
+exports.getAgentsPayments = getAgentsPayments;
 
 
 /***/ }),
@@ -31816,7 +31915,7 @@ exports.DB_OP_FAILURE = "DB_OP_FAILURE";
 "use strict";
 
 exports.__esModule = true;
-exports.currentYear = exports.getCurrentTime = void 0;
+exports.getMonthInNumber = exports.getMonthInLetters = exports.currentMonth = exports.currentYear = exports.getCurrentTime = void 0;
 var date = new Date();
 var getCurrentTime = function () {
     var now = new Date();
@@ -31826,6 +31925,90 @@ var getCurrentTime = function () {
 };
 exports.getCurrentTime = getCurrentTime;
 exports.currentYear = date.getFullYear();
+exports.currentMonth = date.getMonth() + 1;
+var getMonthInLetters = function (monthNumber) {
+    switch (monthNumber) {
+        case 1:
+            return 'january';
+        case 2:
+            return 'february';
+        case 3:
+            return 'march';
+        case 4:
+            return 'april';
+        case 5:
+            return 'may';
+        case 6:
+            return 'june';
+        case 7:
+            return 'july';
+        case 8:
+            return 'august';
+        case 9:
+            return 'september';
+        case 10:
+            return 'october';
+        case 11:
+            return 'november';
+        default:
+            return 'december';
+    }
+};
+exports.getMonthInLetters = getMonthInLetters;
+var getMonthInNumber = function (monthLetter) {
+    switch (monthLetter) {
+        case 'january':
+            return 1;
+        case 'february':
+            return 2;
+        case 'march':
+            return 3;
+        case 'april':
+            return 4;
+        case 'may':
+            return 5;
+        case 'june':
+            return 6;
+        case 'july':
+            return 7;
+        case 'august':
+            return 8;
+        case 'september':
+            return 9;
+        case 'october':
+            return 10;
+        case 'november':
+            return 11;
+        default:
+            return 12;
+    }
+};
+exports.getMonthInNumber = getMonthInNumber;
+
+
+/***/ }),
+
+/***/ "./src/utils/numbers.ts":
+/*!******************************!*\
+  !*** ./src/utils/numbers.ts ***!
+  \******************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+exports.__esModule = true;
+exports.formatNumberToCurrency = void 0;
+var formatNumberToCurrency = function (number) {
+    var formatter = new Intl.NumberFormat('fr-FR', {
+        style: 'currency',
+        currency: 'DIN',
+        // These options are needed to round to whole numbers if that's what you want.
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 3, // (causes 2500.99 to be printed as $2,501)
+    });
+    return formatter.format(number);
+};
+exports.formatNumberToCurrency = formatNumberToCurrency;
 
 
 /***/ }),

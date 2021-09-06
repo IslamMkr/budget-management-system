@@ -3,13 +3,10 @@ import { useState, useEffect } from "react"
 import * as database from './../database'
 import React = require("react")
 
-const AgentsDetails = () => {
-
-    const [payments, setPayments] = useState([])
+const AgentsDetails = ({ payments }) => {
     const [agents, setAgents] = useState([])
 
     useEffect(() => {
-        database.getAgentPayments().then(payments => setPayments(payments))
         database.getAllAgents().then(allAgents => setAgents(allAgents))
     }, [])
 

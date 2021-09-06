@@ -145,8 +145,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #table-compte-cle {
-	width: 25%;
+	width: 150px;
 	margin-right: 10px;
+	font-weight: bold;
 }
 
 #table-compte-cle li {
@@ -156,6 +157,7 @@ h1, h2, h3, h4, h5, h6 {
 
 #table-other {
 	width: 85%;
+	font-weight: bold;
 }
 
 #table-other li {
@@ -179,11 +181,10 @@ h1, h2, h3, h4, h5, h6 {
 .table-item li {
 	font-size: 0.9em;
 	color: #000000;
-	font-weight: bold;
 }
 
 #table-item-compte-cle {
-	width: 25%;
+	width: 150px;
 	margin-right: 10px;
 }
 
@@ -224,6 +225,7 @@ h1, h2, h3, h4, h5, h6 {
 
 #table-compte-nom {
 	margin-right: 10px;
+	font-weight: bold;
 }
 
 #compte-num {
@@ -237,11 +239,13 @@ h1, h2, h3, h4, h5, h6 {
 
 #table-standard-details li {
 	width: 150px;
+	font-weight: bold;
 }
 
 #table-total li {
 	width: 150px;
 	margin: 0px 10px;
+	font-weight: bold;
 }
 
 #table-item-compte-nom {
@@ -361,6 +365,7 @@ button img {
 	margin: 2px 0px;
 	padding: 3px 7px;
 	font-size: 0.9em;
+	border: 1px solid #d9dedf;
 }
   
 #last {

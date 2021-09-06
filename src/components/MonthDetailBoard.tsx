@@ -2,14 +2,33 @@ import AgentsDetails from "./AgentsDetails"
 import printIcon from "./../images/print_white.svg"
 import React = require("react")
 import * as database from './../database'
+import * as DateUtils from './../utils/date'
 const { useState, useEffect } = require("react")
 
 const MonthDetailBoard = () => {
     const [partners, setPartners] = useState([])
+    const [month, setMonth] = useState('january')
+
+    const [payments, setPayments] = useState([])
 
     useEffect(() => {
         database.getAllPartners().then(partners => setPartners(partners))
+        setMonth(DateUtils.getMonthInLetters(DateUtils.currentMonth))
+
+        const monthNumber = DateUtils.currentMonth
+        const year = DateUtils.currentYear
+        
+        database.getAgentsPayments(monthNumber, year).then(payments => setPayments(payments))
     }, [])
+
+    const handleMonthSelection = (e) => {
+        setMonth(e.target.value)
+
+        const monthNumber = DateUtils.getMonthInNumber(e.target.value)
+        const year = DateUtils.currentYear
+
+        database.getAgentsPayments(monthNumber, year).then(payments => setPayments(payments))
+    }
 
     const printClicked = () => {
         //ipcRenderer.send("ping", "Hello finally")
@@ -20,7 +39,7 @@ const MonthDetailBoard = () => {
             <div className="page-title">
                 <h2>Détails du mois</h2>
                 <div className="side-menu">
-                    <select id="month-select">
+                    <select id="month-select" value={month} onChange={(e) => handleMonthSelection(e)} >
                         <option value="january">Janvier</option>
                         <option value="february">Février</option>
                         <option value="march">Mars</option>
@@ -48,13 +67,10 @@ const MonthDetailBoard = () => {
                         <li id="nom">Nom et Prénom</li>
                     </ul>
                     <ul id="table-standard-details">
-                        <li>Prêt achat</li>
-                        <li>Prêt ordinaire</li>
-                        <li>Avances</li>
                         {
                             partners.map (
                                 partner => (
-                                    <li>{partner.nom}</li>
+                                    <li key={partner.pid}>{partner.nom}</li>
                                 )
                             )
                         }
@@ -64,7 +80,7 @@ const MonthDetailBoard = () => {
                     </ul>
                 </div>
                 
-                <AgentsDetails />
+                <AgentsDetails payments={payments} />
             </div>
         </div>
     )

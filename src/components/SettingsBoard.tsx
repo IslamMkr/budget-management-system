@@ -4,12 +4,17 @@ import Partners from "./Partners"
 import AddPartner from "./AddPartner"
 import addIcon from "./../images/add_white.svg"
 import editIcon from "./../images/edit_white.svg"
-const { useState, useEffect } = require("react")
 import * as database from './../database'
+import * as NumberUtils from './../utils/numbers'
+import { useEffect, useState } from "react"
 
 const SettingsBoard = () => {
-    const [isAddPartnerVisible, setAddPartnerVisibility] = useState(false)
+    const [addPartnerVisibility, setAddPartnerVisibility] = useState(false)
+    const [updateBudgetVisibility, setUpdateBudgetVisibility] = useState(false)
+
     const [partners, setPartners] = useState([])
+    const [budget, setBudget] = useState(0)
+    const [newBudget, setNewDudget] = useState("")
 
     useEffect(() => {
         fetchData()
@@ -21,6 +26,17 @@ const SettingsBoard = () => {
 
     const fetchData = () => {
         database.getAllPartners().then(data => setPartners(data))
+        database.getTresorBudget().then(data => {setBudget(data[0].tresor_budget)})
+    }
+
+    const handleUpdateBudgetRequest = () => {
+        setUpdateBudgetVisibility(false)
+
+        // Update database
+        database.updateTresorBudget(Number(newBudget))      
+
+        // Update UI
+        setBudget(Number(newBudget))  
     }
 
     return (
@@ -28,12 +44,46 @@ const SettingsBoard = () => {
             <h2>Général</h2>
 
             <div id="setting-budget">
-                <p>Budget des oeuvres social</p>
-                <p>1,650,870.00</p>
+                <p>Budget</p>
 
-                <button className="btn-edit" id="btn">
-                    <img src={editIcon} />
-                </button>
+                {
+                    !updateBudgetVisibility 
+                    
+                    &&
+
+                    <>
+                        <p>{NumberUtils.formatNumberToCurrency(budget)}</p>
+                        
+                        <button className="btn-edit" id="btn">
+                            <img src={editIcon} onClick={() => setUpdateBudgetVisibility(true)} />
+                        </button>
+                    </>
+                }
+                
+                {
+                    updateBudgetVisibility 
+                    
+                    && 
+
+                    <div className='delete-popup'>
+                        <div className="form-control-add-agent">
+                            <input type="number" 
+                                placeholder="Nouveau budget" 
+                                value={newBudget} 
+                                onChange={(e) => setNewDudget(e.target.value)} />
+                        </div>
+
+                        <div id='update-popup'>
+                            <button className="btn" 
+                                id="update-confirmation-button"
+                                onClick={handleUpdateBudgetRequest}>Enregistrer</button>
+                            <button className='btn'
+                                id="delete-annulation-button"
+                                onClick={() => setUpdateBudgetVisibility(false)}>Annuler</button>
+                        </div>
+                    </div>
+                }
+
             </div>
 
             <div className="page-title">
@@ -46,7 +96,7 @@ const SettingsBoard = () => {
             </div>
 
             {
-                isAddPartnerVisible && <AddPartner isVisible={(visibility: boolean) => setAddPartnerVisibility(visibility)} notifyPartnersDataChanged={fetchData} />
+                addPartnerVisibility && <AddPartner isVisible={(visibility: boolean) => setAddPartnerVisibility(visibility)} notifyPartnersDataChanged={fetchData} />
             }
 
             <Partners partners={partners} notifyDataChanged={fetchData} />

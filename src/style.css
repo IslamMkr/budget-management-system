@@ -21,6 +21,10 @@
     border-radius: 100px;
 }
 
+::-webkit-scrollbar-thumb:hover {
+  background: #757575; 
+}
+
 body {
 	height: 95vh;
 	background-color: white;
@@ -456,4 +460,18 @@ button img {
 #update-confirmation-button {
 	margin-right: 10px;
 	background-color: rgb(65, 156, 13);
+}
+
+.search-from {
+	display: flex;
+	flex-direction: row;
+	vertical-align: middle;
+}
+
+.search-from input {
+	height: 35px;
+	padding: 3px 7px;
+	font-size: 0.9em;
+	border: 1px solid #d9dedf;
+	margin-right: 10px;
 }

@@ -53,6 +53,7 @@ const database = knex(knexConfig)
 export const getAllAgents = async () => {
     return await database.select()
                     .from(Constants.DB_TABLE_AGENTS)
+                    .orderBy(Constants.DB_COLUMN_NOM, Constants.DB_COLUMN_PRENOM)
 }
 
 export const getAllPartners = async () => {
@@ -103,7 +104,6 @@ const initializeDebts = async (partner) => {
 }
 
 const initializeAgentPartnerPayments = async (agent, partner) => {
-    console.log("adding payments")
     const records = [
         { pid: partner.pid, aid: agent.aid, montant: 0, mois: 1, annee: DateUtils.currentYear, timestamp: DateUtils.getCurrentTime() },
         { pid: partner.pid, aid: agent.aid, montant: 0, mois: 2, annee: DateUtils.currentYear, timestamp: DateUtils.getCurrentTime() },
@@ -181,4 +181,16 @@ export const getAgentsPayments = async (month, year) => {
                     .andWhere('payments.mois', month)
                     .andWhere('payments.annee', year)
                     .orderBy('payments.pid')
+}
+
+
+export const getTresorBudget = async () => {
+    return await database.select().from(Constants.DB_TABLE_TRESOR)
+}
+
+export const updateTresorBudget = async (budget) => {
+    await database(Constants.DB_TABLE_TRESOR)
+            .where('tid', 1)
+            .update('tresor_budget', budget)
+            .update('timestamp', DateUtils.getCurrentTime())
 }

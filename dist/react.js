@@ -31249,13 +31249,17 @@ var AgentsBoard_1 = __webpack_require__(/*! ./AgentsBoard */ "./src/components/A
 var MonthDetailBoard_1 = __webpack_require__(/*! ./MonthDetailBoard */ "./src/components/MonthDetailBoard.tsx");
 var SearchBoard_1 = __webpack_require__(/*! ./SearchBoard */ "./src/components/SearchBoard.tsx");
 var SettingsBoard_1 = __webpack_require__(/*! ./SettingsBoard */ "./src/components/SettingsBoard.tsx");
+var TransactionsBoard_1 = __webpack_require__(/*! ./TransactionsBoard */ "./src/components/TransactionsBoard.tsx");
 var Content = function (_a) {
     var visibleContent = _a.visibleContent;
+    var disconnect = function () {
+    };
     return (React.createElement("div", { className: "content" }, visibleContent == "Agents" ? React.createElement(AgentsBoard_1["default"], null)
         : (visibleContent == "Détails du mois" ? React.createElement(MonthDetailBoard_1["default"], null)
             : (visibleContent == "Rechercher" ? React.createElement(SearchBoard_1["default"], null)
                 : (visibleContent == "Paramètres" ? React.createElement(SettingsBoard_1["default"], null)
-                    : "")))));
+                    : (visibleContent == "Transactions" ? React.createElement(TransactionsBoard_1["default"], null)
+                        : React.createElement("div", null)))))));
 };
 exports.default = Content;
 
@@ -31310,6 +31314,7 @@ var Menu = function (_a) {
     return (React.createElement("div", { className: "menu" },
         React.createElement(MenuItem, { text: "Agents", activeItem: activeItem, clickHandler: function (text) { return handleClick(text); } }),
         React.createElement(MenuItem, { text: "D\u00E9tails du mois", activeItem: activeItem, clickHandler: function (text) { return handleClick(text); } }),
+        React.createElement(MenuItem, { text: "Transactions", activeItem: activeItem, clickHandler: function (text) { return handleClick(text); } }),
         React.createElement(MenuItem, { text: "Agents sold\u00E9s", activeItem: activeItem, clickHandler: function (text) { return handleClick(text); } }),
         React.createElement(MenuItem, { text: "Rechercher", activeItem: activeItem, clickHandler: function (text) { return handleClick(text); } }),
         React.createElement(MenuItem, { text: "Param\u00E8tres", activeItem: activeItem, clickHandler: function (text) { return handleClick(text); } })));
@@ -31509,10 +31514,32 @@ exports.default = Partners;
 
 exports.__esModule = true;
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var react_1 = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var search_white_svg_1 = __webpack_require__(/*! ./../images/search_white.svg */ "./src/images/search_white.svg");
 var SearchBoard = function () {
+    var _a = (0, react_1.useState)(""), compte = _a[0], setCompte = _a[1];
+    var _b = (0, react_1.useState)(false), resultVisibility = _b[0], setResultVisibility = _b[1];
+    var handleSearch = function () {
+        if (compte.length == 4) {
+            // TODO: get user 
+            // IF IT EXISTS : get his data (agent, debts, payments for every month for every partner)
+            // IF IT NOT EXISTS : handle error agent do not exist
+        }
+        else {
+            // TODO: handle error account number must be 4 digits
+        }
+    };
     return (React.createElement("div", { className: "board" },
         React.createElement("div", { className: "page-title" },
-            React.createElement("h2", null, "Rechercher"))));
+            React.createElement("h2", null, "Rechercher")),
+        React.createElement("div", { className: "search-from" },
+            React.createElement("input", { type: "number", value: compte, placeholder: 'Num\u00E9ro du compte', onChange: function (e) {
+                    if (e.target.value.length <= 4) {
+                        setCompte(e.target.value);
+                    }
+                } }),
+            React.createElement("button", { className: 'btn-img-default', id: 'btn', onClick: handleSearch },
+                React.createElement("img", { src: search_white_svg_1["default"] })))));
 };
 exports.default = SearchBoard;
 
@@ -31533,12 +31560,16 @@ var Partners_1 = __webpack_require__(/*! ./Partners */ "./src/components/Partner
 var AddPartner_1 = __webpack_require__(/*! ./AddPartner */ "./src/components/AddPartner.tsx");
 var add_white_svg_1 = __webpack_require__(/*! ./../images/add_white.svg */ "./src/images/add_white.svg");
 var edit_white_svg_1 = __webpack_require__(/*! ./../images/edit_white.svg */ "./src/images/edit_white.svg");
-var _a = __webpack_require__(/*! react */ "./node_modules/react/index.js"), useState = _a.useState, useEffect = _a.useEffect;
 var database = __webpack_require__(/*! ./../database */ "./src/database.ts");
+var NumberUtils = __webpack_require__(/*! ./../utils/numbers */ "./src/utils/numbers.ts");
+var react_1 = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var SettingsBoard = function () {
-    var _a = useState(false), isAddPartnerVisible = _a[0], setAddPartnerVisibility = _a[1];
-    var _b = useState([]), partners = _b[0], setPartners = _b[1];
-    useEffect(function () {
+    var _a = (0, react_1.useState)(false), addPartnerVisibility = _a[0], setAddPartnerVisibility = _a[1];
+    var _b = (0, react_1.useState)(false), updateBudgetVisibility = _b[0], setUpdateBudgetVisibility = _b[1];
+    var _c = (0, react_1.useState)([]), partners = _c[0], setPartners = _c[1];
+    var _d = (0, react_1.useState)(0), budget = _d[0], setBudget = _d[1];
+    var _e = (0, react_1.useState)(""), newBudget = _e[0], setNewDudget = _e[1];
+    (0, react_1.useEffect)(function () {
         fetchData();
     }, []);
     var handleAddPartner = function () {
@@ -31546,22 +31577,61 @@ var SettingsBoard = function () {
     };
     var fetchData = function () {
         database.getAllPartners().then(function (data) { return setPartners(data); });
+        database.getTresorBudget().then(function (data) { setBudget(data[0].tresor_budget); });
+    };
+    var handleUpdateBudgetRequest = function () {
+        setUpdateBudgetVisibility(false);
+        // Update database
+        database.updateTresorBudget(Number(newBudget));
+        // Update UI
+        setBudget(Number(newBudget));
     };
     return (React.createElement("div", { className: "board" },
         React.createElement("h2", null, "G\u00E9n\u00E9ral"),
         React.createElement("div", { id: "setting-budget" },
-            React.createElement("p", null, "Budget des oeuvres social"),
-            React.createElement("p", null, "1,650,870.00"),
-            React.createElement("button", { className: "btn-edit", id: "btn" },
-                React.createElement("img", { src: edit_white_svg_1["default"] }))),
+            React.createElement("p", null, "Budget"),
+            !updateBudgetVisibility
+                &&
+                    React.createElement(React.Fragment, null,
+                        React.createElement("p", null, NumberUtils.formatNumberToCurrency(budget)),
+                        React.createElement("button", { className: "btn-edit", id: "btn" },
+                            React.createElement("img", { src: edit_white_svg_1["default"], onClick: function () { return setUpdateBudgetVisibility(true); } }))),
+            updateBudgetVisibility
+                &&
+                    React.createElement("div", { className: 'delete-popup' },
+                        React.createElement("div", { className: "form-control-add-agent" },
+                            React.createElement("input", { type: "number", placeholder: "Nouveau budget", value: newBudget, onChange: function (e) { return setNewDudget(e.target.value); } })),
+                        React.createElement("div", { id: 'update-popup' },
+                            React.createElement("button", { className: "btn", id: "update-confirmation-button", onClick: handleUpdateBudgetRequest }, "Enregistrer"),
+                            React.createElement("button", { className: 'btn', id: "delete-annulation-button", onClick: function () { return setUpdateBudgetVisibility(false); } }, "Annuler")))),
         React.createElement("div", { className: "page-title" },
             React.createElement("h2", null, "Liste des partenaires"),
             React.createElement("button", { className: "btn-img-default", id: "btn", onClick: handleAddPartner },
                 React.createElement("img", { src: add_white_svg_1["default"] }))),
-        isAddPartnerVisible && React.createElement(AddPartner_1["default"], { isVisible: function (visibility) { return setAddPartnerVisibility(visibility); }, notifyPartnersDataChanged: fetchData }),
+        addPartnerVisibility && React.createElement(AddPartner_1["default"], { isVisible: function (visibility) { return setAddPartnerVisibility(visibility); }, notifyPartnersDataChanged: fetchData }),
         React.createElement(Partners_1["default"], { partners: partners, notifyDataChanged: fetchData })));
 };
 exports.default = SettingsBoard;
+
+
+/***/ }),
+
+/***/ "./src/components/TransactionsBoard.tsx":
+/*!**********************************************!*\
+  !*** ./src/components/TransactionsBoard.tsx ***!
+  \**********************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+exports.__esModule = true;
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var PaymentsBoard = function () {
+    return (React.createElement("div", { className: "board" },
+        React.createElement("div", { className: "page-title" },
+            React.createElement("h2", null, "Ajout des nouvelles transactions"))));
+};
+exports.default = PaymentsBoard;
 
 
 /***/ }),
@@ -31611,7 +31681,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.getAgentsPayments = exports.getPartnerWithName = exports.updatePartner = exports.deletePartner = exports.addPartner = exports.addAgent = exports.getAllPartners = exports.getAllAgents = void 0;
+exports.updateTresorBudget = exports.getTresorBudget = exports.getAgentsPayments = exports.getPartnerWithName = exports.updatePartner = exports.deletePartner = exports.addPartner = exports.addAgent = exports.getAllPartners = exports.getAllAgents = void 0;
 var knex_1 = __webpack_require__(/*! knex */ "knex");
 var Constants = __webpack_require__(/*! ./utils/constants */ "./src/utils/constants.ts");
 var DateUtils = __webpack_require__(/*! ./utils/date */ "./src/utils/date.ts");
@@ -31660,7 +31730,8 @@ var getAllAgents = function () { return __awaiter(void 0, void 0, void 0, functi
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, database.select()
-                    .from(Constants.DB_TABLE_AGENTS)];
+                    .from(Constants.DB_TABLE_AGENTS)
+                    .orderBy(Constants.DB_COLUMN_NOM, Constants.DB_COLUMN_PRENOM)];
             case 1: return [2 /*return*/, _a.sent()];
         }
     });
@@ -31741,7 +31812,6 @@ var initializeAgentPartnerPayments = function (agent, partner) { return __awaite
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                console.log("adding payments");
                 records = [
                     { pid: partner.pid, aid: agent.aid, montant: 0, mois: 1, annee: DateUtils.currentYear, timestamp: DateUtils.getCurrentTime() },
                     { pid: partner.pid, aid: agent.aid, montant: 0, mois: 2, annee: DateUtils.currentYear, timestamp: DateUtils.getCurrentTime() },
@@ -31865,6 +31935,29 @@ var getAgentsPayments = function (month, year) { return __awaiter(void 0, void 0
     });
 }); };
 exports.getAgentsPayments = getAgentsPayments;
+var getTresorBudget = function () { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, database.select().from(Constants.DB_TABLE_TRESOR)];
+            case 1: return [2 /*return*/, _a.sent()];
+        }
+    });
+}); };
+exports.getTresorBudget = getTresorBudget;
+var updateTresorBudget = function (budget) { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, database(Constants.DB_TABLE_TRESOR)
+                    .where('tid', 1)
+                    .update('tresor_budget', budget)
+                    .update('timestamp', DateUtils.getCurrentTime())];
+            case 1:
+                _a.sent();
+                return [2 /*return*/];
+        }
+    });
+}); };
+exports.updateTresorBudget = updateTresorBudget;
 
 
 /***/ }),
@@ -31878,7 +31971,7 @@ exports.getAgentsPayments = getAgentsPayments;
 "use strict";
 
 exports.__esModule = true;
-exports.DB_OP_FAILURE = exports.DB_OP_SUCCESS = exports.DB_RESPONSE_ADD_PARTNER = exports.DB_RESPONSE_ADD_AGENT = exports.DB_RESPONSE_GET_ALL_AGENTS = exports.DB_ADD_PARTNER = exports.DB_ADD_AGENT = exports.DB_GET_ALL_AGENTS = exports.DB_TABLE_PAYMENTS = exports.DB_TABLE_AGENTS_DETTES = exports.DB_TABLE_PARTNERS = exports.DB_TABLE_AGENTS = exports.ADD_AGENT_WINDOW_CLOSE_REQUEST = void 0;
+exports.DB_OP_FAILURE = exports.DB_OP_SUCCESS = exports.DB_RESPONSE_ADD_PARTNER = exports.DB_RESPONSE_ADD_AGENT = exports.DB_RESPONSE_GET_ALL_AGENTS = exports.DB_ADD_PARTNER = exports.DB_ADD_AGENT = exports.DB_GET_ALL_AGENTS = exports.DB_COLUMN_PRENOM = exports.DB_COLUMN_NOM = exports.DB_TABLE_TRESOR = exports.DB_TABLE_PAYMENTS = exports.DB_TABLE_AGENTS_DETTES = exports.DB_TABLE_PARTNERS = exports.DB_TABLE_AGENTS = exports.ADD_AGENT_WINDOW_CLOSE_REQUEST = void 0;
 /**
  * UI CONSTANTS
  */
@@ -31891,6 +31984,9 @@ exports.DB_TABLE_AGENTS = 'agents';
 exports.DB_TABLE_PARTNERS = 'partenaires';
 exports.DB_TABLE_AGENTS_DETTES = 'agents_dettes';
 exports.DB_TABLE_PAYMENTS = 'payments';
+exports.DB_TABLE_TRESOR = 'tresor';
+exports.DB_COLUMN_NOM = "nom";
+exports.DB_COLUMN_PRENOM = 'prenom';
 // OPERATIONS
 exports.DB_GET_ALL_AGENTS = "DB_GET_ALL_AGENTS";
 exports.DB_ADD_AGENT = 'DB_ADD_AGENT';
@@ -32085,6 +32181,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMjRweCIgdmlld0JveD0iMCAwIDI0IDI0IiB3aWR0aD0iMjRweCIgZmlsbD0iI0ZGRkZGRiI+PHBhdGggZD0iTTAgMGgyNHYyNEgwVjB6IiBmaWxsPSJub25lIi8+PHBhdGggZD0iTTE5IDhoLTFWM0g2djVINWMtMS42NiAwLTMgMS4zNC0zIDN2Nmg0djRoMTJ2LTRoNHYtNmMwLTEuNjYtMS4zNC0zLTMtM3pNOCA1aDh2M0g4VjV6bTggMTJ2Mkg4di00aDh2MnptMi0ydi0ySDZ2Mkg0di00YzAtLjU1LjQ1LTEgMS0xaDE0Yy41NSAwIDEgLjQ1IDEgMXY0aC0yeiIvPjxjaXJjbGUgY3g9IjE4IiBjeT0iMTEuNSIgcj0iMSIvPjwvc3ZnPg==");
+
+/***/ }),
+
+/***/ "./src/images/search_white.svg":
+/*!*************************************!*\
+  !*** ./src/images/search_white.svg ***!
+  \*************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMjRweCIgdmlld0JveD0iMCAwIDI0IDI0IiB3aWR0aD0iMjRweCIgZmlsbD0iI0ZGRkZGRiI+PHBhdGggZD0iTTAgMGgyNHYyNEgwVjB6IiBmaWxsPSJub25lIi8+PHBhdGggZD0iTTE1LjUgMTRoLS43OWwtLjI4LS4yN0MxNS40MSAxMi41OSAxNiAxMS4xMSAxNiA5LjUgMTYgNS45MSAxMy4wOSAzIDkuNSAzUzMgNS45MSAzIDkuNSA1LjkxIDE2IDkuNSAxNmMxLjYxIDAgMy4wOS0uNTkgNC4yMy0xLjU3bC4yNy4yOHYuNzlsNSA0Ljk5TDIwLjQ5IDE5bC00Ljk5LTV6bS02IDBDNy4wMSAxNCA1IDExLjk5IDUgOS41UzcuMDEgNSA5LjUgNSAxNCA3LjAxIDE0IDkuNSAxMS45OSAxNCA5LjUgMTR6Ii8+PC9zdmc+");
 
 /***/ }),
 

@@ -12,6 +12,7 @@ const Menu = ({ activeItem, onItemClick }) => {
         <div className="menu">   
             <MenuItem text="Agents" activeItem={activeItem} clickHandler={(text) => handleClick(text)} />
             <MenuItem text="Détails du mois" activeItem={activeItem} clickHandler={(text) => handleClick(text)} />
+            <MenuItem text="Transactions" activeItem={activeItem} clickHandler={(text) => handleClick(text)} />
             <MenuItem text="Agents soldés" activeItem={activeItem} clickHandler={(text) => handleClick(text)} />
             <MenuItem text="Rechercher" activeItem={activeItem} clickHandler={(text) => handleClick(text)} />
             <MenuItem text="Paramètres" activeItem={activeItem} clickHandler={(text) => handleClick(text)} />

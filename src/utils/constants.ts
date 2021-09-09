@@ -12,6 +12,10 @@ export const DB_TABLE_AGENTS = 'agents'
 export const DB_TABLE_PARTNERS = 'partenaires'
 export const DB_TABLE_AGENTS_DETTES = 'agents_dettes'
 export const DB_TABLE_PAYMENTS = 'payments'
+export const DB_TABLE_TRESOR = 'tresor'
+
+export const DB_COLUMN_NOM = "nom"
+export const DB_COLUMN_PRENOM = 'prenom'
 
 // OPERATIONS
 export const DB_GET_ALL_AGENTS = "DB_GET_ALL_AGENTS"

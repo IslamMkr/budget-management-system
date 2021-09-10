@@ -16,7 +16,6 @@ const AgentDetail = ({ agent, payments }) => {
             </ul>
             <ul id="table-item-standard-details">
                 {
-                    // TODO : when there is no payments fix it 
                     payments.map (
                         pay => <li key={pay.pid}>{pay.montant == 0 ? '--' : NumberUtils.formatNumberToCurrency(pay.montant)}</li>
                     )

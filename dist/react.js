@@ -31115,9 +31115,7 @@ var AgentDetail = function (_a) {
         React.createElement("ul", { id: "table-item-compte-nom" },
             React.createElement("li", { id: "compte-num" }, agent.compte + '/' + agent.cle),
             React.createElement("li", { id: "nom" }, agent.nom + ' ' + agent.prenom)),
-        React.createElement("ul", { id: "table-item-standard-details" }, 
-        // TODO : when there is no payments fix it 
-        payments.map(function (pay) { return React.createElement("li", { key: pay.pid }, pay.montant == 0 ? '--' : NumberUtils.formatNumberToCurrency(pay.montant)); })),
+        React.createElement("ul", { id: "table-item-standard-details" }, payments.map(function (pay) { return React.createElement("li", { key: pay.pid }, pay.montant == 0 ? '--' : NumberUtils.formatNumberToCurrency(pay.montant)); })),
         React.createElement("ul", { id: "table-item-total" },
             React.createElement("li", null, calculateTotal()))));
 };
@@ -31418,6 +31416,40 @@ exports.default = MonthDetailBoard;
 
 /***/ }),
 
+/***/ "./src/components/MonthPaymentsDetails.tsx":
+/*!*************************************************!*\
+  !*** ./src/components/MonthPaymentsDetails.tsx ***!
+  \*************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+exports.__esModule = true;
+var react_1 = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var DateUtils = __webpack_require__(/*! ./../utils/date */ "./src/utils/date.ts");
+var NumberUtils = __webpack_require__(/*! ./../utils/numbers */ "./src/utils/numbers.ts");
+var MonthPaymentsDetails = function (_a) {
+    var monthPayments = _a.monthPayments;
+    (0, react_1.useEffect)(function () {
+        console.log(monthPayments);
+    }, []);
+    var calculateTotalMonthPayment = function () {
+        var totalMonthPayment = monthPayments.reduce(function (acc, pay) { return acc + pay.montant; }, 0);
+        return NumberUtils.formatNumberToCurrency(totalMonthPayment);
+    };
+    return (React.createElement("div", { className: "table-item", id: "month-table" },
+        React.createElement("ul", { id: "table-item-compte-nom" },
+            React.createElement("li", { id: "nom" }, DateUtils.getMonthInLetters(monthPayments[0].mois))),
+        React.createElement("ul", { id: "table-item-standard-details" }, monthPayments.map(function (monthPayment) { return (React.createElement("li", { key: monthPayment.pid }, NumberUtils.formatNumberToCurrency(monthPayment.montant))); })),
+        React.createElement("ul", { id: "table-item-total" },
+            React.createElement("li", null, calculateTotalMonthPayment()))));
+};
+exports.default = MonthPaymentsDetails;
+
+
+/***/ }),
+
 /***/ "./src/components/Partner.tsx":
 /*!************************************!*\
   !*** ./src/components/Partner.tsx ***!
@@ -31514,20 +31546,54 @@ exports.default = Partners;
 
 exports.__esModule = true;
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-var react_1 = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var MonthPaymentsDetails_1 = __webpack_require__(/*! ./MonthPaymentsDetails */ "./src/components/MonthPaymentsDetails.tsx");
+var database = __webpack_require__(/*! ./../database */ "./src/database.ts");
+var DateUtils = __webpack_require__(/*! ./../utils/date */ "./src/utils/date.ts");
+var NumberUtils = __webpack_require__(/*! ./../utils/numbers */ "./src/utils/numbers.ts");
 var search_white_svg_1 = __webpack_require__(/*! ./../images/search_white.svg */ "./src/images/search_white.svg");
+var react_1 = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var SearchBoard = function () {
     var _a = (0, react_1.useState)(""), compte = _a[0], setCompte = _a[1];
-    var _b = (0, react_1.useState)(false), resultVisibility = _b[0], setResultVisibility = _b[1];
+    var _b = (0, react_1.useState)(null), agent = _b[0], setAgent = _b[1];
+    var _c = (0, react_1.useState)([]), partners = _c[0], setPartners = _c[1];
+    var _d = (0, react_1.useState)([]), debts = _d[0], setDebts = _d[1];
+    var _e = (0, react_1.useState)([]), payments = _e[0], setPayments = _e[1];
+    var _f = (0, react_1.useState)(false), resultVisibility = _f[0], setResultVisibility = _f[1];
+    var _g = (0, react_1.useState)(false), errorAgentDoNotExistVisibility = _g[0], setErrorAgentDoNotExistVisibility = _g[1];
+    var _h = (0, react_1.useState)(false), errorInputIncorectVisibility = _h[0], setErrorInputIncorectVisibility = _h[1];
+    var monthNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
     var handleSearch = function () {
+        setErrorAgentDoNotExistVisibility(false);
+        setErrorInputIncorectVisibility(false);
+        setResultVisibility(false);
         if (compte.length == 4) {
-            // TODO: get user 
-            // IF IT EXISTS : get his data (agent, debts, payments for every month for every partner)
-            // IF IT NOT EXISTS : handle error agent do not exist
+            getAgent();
         }
         else {
-            // TODO: handle error account number must be 4 digits
+            setErrorInputIncorectVisibility(true);
         }
+    };
+    var getAgent = function () {
+        database.getAgentWithAccountNumber(Number(compte))
+            .then(function (data) {
+            if (data.length == 0) {
+                setErrorAgentDoNotExistVisibility(true);
+            }
+            else {
+                setAgent(data[0]);
+                getAgentData(data[0]);
+            }
+        });
+    };
+    var getAgentData = function (agent) {
+        database.getAllPartners().then(function (partners) { return setPartners(partners); });
+        database.getAgentPaymentsByMonths(agent.aid, DateUtils.currentYear).then(function (data) { console.log(payments); setPayments(data); });
+        database.getAgentDebts(agent.aid, DateUtils.currentYear).then(function (data) { setDebts(data); });
+        setResultVisibility(true);
+    };
+    var calculateTotalDebts = function () {
+        var totalDebts = debts.reduce(function (acc, debt) { return acc + debt.montant_global; }, 0);
+        return NumberUtils.formatNumberToCurrency(totalDebts);
     };
     return (React.createElement("div", { className: "board" },
         React.createElement("div", { className: "page-title" },
@@ -31539,7 +31605,30 @@ var SearchBoard = function () {
                     }
                 } }),
             React.createElement("button", { className: 'btn-img-default', id: 'btn', onClick: handleSearch },
-                React.createElement("img", { src: search_white_svg_1["default"] })))));
+                React.createElement("img", { src: search_white_svg_1["default"] }))),
+        errorAgentDoNotExistVisibility && React.createElement("h5", { id: "error-msg" }, "Ce num\u00E9ro du compte ne correspond a aucun agent !"),
+        errorInputIncorectVisibility && React.createElement("h5", { id: "error-msg" }, "Un num\u00E9ro de compte est compos\u00E9 de 4 chiffres !"),
+        React.createElement(React.Fragment, null, resultVisibility
+            &&
+                React.createElement("div", null,
+                    React.createElement("div", { id: 'agent-name' },
+                        React.createElement("h4", null, agent.compte + '/' + agent.cle),
+                        React.createElement("h4", null, agent.nom + ' ' + agent.prenom)),
+                    React.createElement("div", { className: "scrollable-table" },
+                        React.createElement("div", { className: "table", id: "month-table" },
+                            React.createElement("ul", { id: "table-compte-nom" },
+                                React.createElement("li", { id: "nom" })),
+                            React.createElement("ul", { id: "table-standard-details" }, partners.map(function (partner) { return (React.createElement("li", { key: partner.pid }, partner.nom)); })),
+                            React.createElement("ul", { id: "table-total" },
+                                React.createElement("li", null, "Total"))),
+                        React.createElement("div", { className: "table-item", id: "month-table" },
+                            React.createElement("ul", { id: "table-item-compte-nom" },
+                                React.createElement("li", { id: "nom" },
+                                    React.createElement("h4", null, "Montant Global"))),
+                            React.createElement("ul", { id: "table-item-standard-details" }, debts.map(function (debt) { return (React.createElement("li", { key: debt.pid }, NumberUtils.formatNumberToCurrency(debt.montant_global))); })),
+                            React.createElement("ul", { id: "table-item-total" },
+                                React.createElement("li", null, calculateTotalDebts()))),
+                        monthNumbers.map(function (monthNumber) { return (payments.length > 0 ? React.createElement(MonthPaymentsDetails_1["default"], { key: monthNumber, monthPayments: payments.filter(function (payment) { return payment.mois == monthNumber; }) }) : ''); }))))));
 };
 exports.default = SearchBoard;
 
@@ -31681,7 +31770,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.updateTresorBudget = exports.getTresorBudget = exports.getAgentsPayments = exports.getPartnerWithName = exports.updatePartner = exports.deletePartner = exports.addPartner = exports.addAgent = exports.getAllPartners = exports.getAllAgents = void 0;
+exports.updateTresorBudget = exports.getTresorBudget = exports.getAgentDebts = exports.getAgentPaymentsByMonths = exports.getAgentsPayments = exports.getPartnerWithName = exports.updatePartner = exports.deletePartner = exports.addPartner = exports.getAgentWithAccountNumber = exports.addAgent = exports.getAllPartners = exports.getAllAgents = void 0;
 var knex_1 = __webpack_require__(/*! knex */ "knex");
 var Constants = __webpack_require__(/*! ./utils/constants */ "./src/utils/constants.ts");
 var DateUtils = __webpack_require__(/*! ./utils/date */ "./src/utils/date.ts");
@@ -31762,7 +31851,7 @@ var addAgent = function (agent) { return __awaiter(void 0, void 0, void 0, funct
 exports.addAgent = addAgent;
 var initializeAgentDebts = function (agent) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
-        getAgentWithAccountNumber(agent).then(function (agentData) {
+        (0, exports.getAgentWithAccountNumber)(agent.compte).then(function (agentData) {
             (0, exports.getAllPartners)().then(function (partners) {
                 partners.forEach(function (partner) {
                     initializeAgentPartnerDebt(agentData[0], partner);
@@ -31773,16 +31862,17 @@ var initializeAgentDebts = function (agent) { return __awaiter(void 0, void 0, v
         return [2 /*return*/];
     });
 }); };
-var getAgentWithAccountNumber = function (agent) { return __awaiter(void 0, void 0, void 0, function () {
+var getAgentWithAccountNumber = function (accountNumber) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, database.select()
                     .from(Constants.DB_TABLE_AGENTS)
-                    .where('compte', agent.compte)];
+                    .where('compte', accountNumber)];
             case 1: return [2 /*return*/, _a.sent()];
         }
     });
 }); };
+exports.getAgentWithAccountNumber = getAgentWithAccountNumber;
 var addPartner = function (partner) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -31935,6 +32025,35 @@ var getAgentsPayments = function (month, year) { return __awaiter(void 0, void 0
     });
 }); };
 exports.getAgentsPayments = getAgentsPayments;
+var getAgentPaymentsByMonths = function (agentID, year) { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, database.select('payments.pid', 'partenaires.nom', 'payments.mois', 'payments.montant')
+                    .from(Constants.DB_TABLE_PAYMENTS)
+                    .join(Constants.DB_TABLE_AGENTS, 'payments.aid', 'agents.aid')
+                    .join(Constants.DB_TABLE_PARTNERS, 'payments.pid', 'partenaires.pid')
+                    .where('payments.aid', agentID)
+                    .andWhere('payments.annee', year)
+                    .orderBy('payments.mois', 'payments.pid')];
+            case 1: return [2 /*return*/, _a.sent()];
+        }
+    });
+}); };
+exports.getAgentPaymentsByMonths = getAgentPaymentsByMonths;
+var getAgentDebts = function (agentID, year) { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, database.select('agents_dettes.pid', 'partenaires.nom', 'agents_dettes.annee', 'agents_dettes.montant_global')
+                    .from(Constants.DB_TABLE_AGENTS_DETTES)
+                    .join(Constants.DB_TABLE_AGENTS, 'agents_dettes.aid', 'agents.aid')
+                    .join(Constants.DB_TABLE_PARTNERS, 'agents_dettes.pid', 'partenaires.pid')
+                    .where('agents_dettes.aid', agentID)
+                    .andWhere('agents_dettes.annee', year)];
+            case 1: return [2 /*return*/, _a.sent()];
+        }
+    });
+}); };
+exports.getAgentDebts = getAgentDebts;
 var getTresorBudget = function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {

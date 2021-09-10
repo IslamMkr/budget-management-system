@@ -475,3 +475,7 @@ button img {
 	border: 1px solid #d9dedf;
 	margin-right: 10px;
 }
+
+#agent-name {
+	margin: 20px 0px;
+}

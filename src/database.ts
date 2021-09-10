@@ -68,7 +68,7 @@ export const addAgent = async (agent) => {
 }
 
 const initializeAgentDebts = async (agent) => {
-    getAgentWithAccountNumber(agent).then(agentData => {
+    getAgentWithAccountNumber(agent.compte).then(agentData => {
         getAllPartners().then(partners => {
             partners.forEach(partner => {
                 initializeAgentPartnerDebt(agentData[0], partner)
@@ -78,10 +78,10 @@ const initializeAgentDebts = async (agent) => {
     })
 }
 
-const getAgentWithAccountNumber = async (agent) => {
+export const getAgentWithAccountNumber = async (accountNumber) => {
     return await database.select()
                     .from(Constants.DB_TABLE_AGENTS)
-                    .where('compte', agent.compte)
+                    .where('compte', accountNumber)
 }
 
 export const addPartner = async (partner) => {
@@ -183,6 +183,24 @@ export const getAgentsPayments = async (month, year) => {
                     .orderBy('payments.pid')
 }
 
+export const getAgentPaymentsByMonths = async (agentID, year) => {
+    return await database.select('payments.pid', 'partenaires.nom', 'payments.mois', 'payments.montant')
+                    .from(Constants.DB_TABLE_PAYMENTS)
+                    .join(Constants.DB_TABLE_AGENTS, 'payments.aid', 'agents.aid')
+                    .join(Constants.DB_TABLE_PARTNERS, 'payments.pid', 'partenaires.pid')
+                    .where('payments.aid', agentID)
+                    .andWhere('payments.annee', year)
+                    .orderBy('payments.mois', 'payments.pid')
+}
+
+export const getAgentDebts = async (agentID, year) => {
+    return await database.select('agents_dettes.pid', 'partenaires.nom', 'agents_dettes.annee', 'agents_dettes.montant_global')
+                    .from(Constants.DB_TABLE_AGENTS_DETTES)
+                    .join(Constants.DB_TABLE_AGENTS, 'agents_dettes.aid', 'agents.aid')
+                    .join(Constants.DB_TABLE_PARTNERS, 'agents_dettes.pid', 'partenaires.pid')
+                    .where('agents_dettes.aid', agentID)
+                    .andWhere('agents_dettes.annee', year)
+}
 
 export const getTresorBudget = async () => {
     return await database.select().from(Constants.DB_TABLE_TRESOR)

@@ -59,6 +59,34 @@ const SearchBoard = () => {
         return NumberUtils.formatNumberToCurrency(totalDebts)
     }
 
+    const calculatePartnerTotal = (partner) => {
+        const partnerDebt = debts.find(debt => debt.pid == partner.pid)
+        const partnerPayments = payments.filter (payment => payment.nom == partner.nom)
+
+        const totalPayments = partnerPayments.reduce((acc, payment) => acc + payment.montant, 0)
+
+        //console.log(partnerDebt)
+        //console.log(partnerDebt.montant_global)
+
+        return partnerDebt == undefined ? '' : NumberUtils.formatNumberToCurrency(partnerDebt.montant_global - totalPayments)
+    }
+
+    const calculateGlobalTotal = () => {
+        let total = 0
+
+        if (debts != []) {
+            debts.forEach (partnerDebt => {
+                let partnerPayments = payments.filter (payment => payment.pid == partnerDebt.pid)
+                let totalPayments = partnerPayments.reduce((acc, payment) => acc + payment.montant, 0)
+                total +=  partnerDebt.montant_global - totalPayments
+            })
+
+            return NumberUtils.formatNumberToCurrency(total)
+        }
+
+        return ''
+    }
+
     return (
         <div className="board">
             <div className="page-title">
@@ -98,8 +126,10 @@ const SearchBoard = () => {
                     
                     <div>
                         <div id='agent-name'>
-                            <h4>{agent.compte + '/' + agent.cle}</h4>
-                            <h4>{agent.nom + ' ' + agent.prenom}</h4>
+                            <hr/>
+                            <h4>N° du Compte : <b>{agent.compte + '/' + agent.cle}</b></h4>
+                            <h4>Nom et Prénom : <b>{agent.nom + ' ' + agent.prenom}</b></h4>
+                            <hr/>
                         </div>
 
                         <div className="scrollable-table">
@@ -147,6 +177,23 @@ const SearchBoard = () => {
                                     )
                                 )
                             }
+
+                            <div className="table-item" id="month-table">
+                                <ul id="table-item-compte-nom">
+                                    <li id="nom"><h4>Total</h4></li>
+                                </ul>
+                                <ul id="table-item-standard-details">
+                                    {
+                                        partners.map (partner => (
+                                            <li key={partner.pid}>{calculatePartnerTotal(partner)}</li>
+                                        ))
+                                    }
+                                </ul>
+                                
+                                <ul id="table-item-total">
+                                    <li><h4>{calculateGlobalTotal()}</h4></li>
+                                </ul>
+                            </div>
 
                         </div>
                     </div>

@@ -31440,7 +31440,7 @@ var MonthPaymentsDetails = function (_a) {
     };
     return (React.createElement("div", { className: "table-item", id: "month-table" },
         React.createElement("ul", { id: "table-item-compte-nom" },
-            React.createElement("li", { id: "nom" }, DateUtils.getMonthInLetters(monthPayments[0].mois))),
+            React.createElement("li", { id: "nom" }, DateUtils.getMonthInUIFrench(monthPayments[0].mois))),
         React.createElement("ul", { id: "table-item-standard-details" }, monthPayments.map(function (monthPayment) { return (React.createElement("li", { key: monthPayment.pid }, NumberUtils.formatNumberToCurrency(monthPayment.montant))); })),
         React.createElement("ul", { id: "table-item-total" },
             React.createElement("li", null, calculateTotalMonthPayment()))));
@@ -31595,6 +31595,26 @@ var SearchBoard = function () {
         var totalDebts = debts.reduce(function (acc, debt) { return acc + debt.montant_global; }, 0);
         return NumberUtils.formatNumberToCurrency(totalDebts);
     };
+    var calculatePartnerTotal = function (partner) {
+        var partnerDebt = debts.find(function (debt) { return debt.pid == partner.pid; });
+        var partnerPayments = payments.filter(function (payment) { return payment.nom == partner.nom; });
+        var totalPayments = partnerPayments.reduce(function (acc, payment) { return acc + payment.montant; }, 0);
+        //console.log(partnerDebt)
+        //console.log(partnerDebt.montant_global)
+        return partnerDebt == undefined ? '' : NumberUtils.formatNumberToCurrency(partnerDebt.montant_global - totalPayments);
+    };
+    var calculateGlobalTotal = function () {
+        var total = 0;
+        if (debts != []) {
+            debts.forEach(function (partnerDebt) {
+                var partnerPayments = payments.filter(function (payment) { return payment.pid == partnerDebt.pid; });
+                var totalPayments = partnerPayments.reduce(function (acc, payment) { return acc + payment.montant; }, 0);
+                total += partnerDebt.montant_global - totalPayments;
+            });
+            return NumberUtils.formatNumberToCurrency(total);
+        }
+        return '';
+    };
     return (React.createElement("div", { className: "board" },
         React.createElement("div", { className: "page-title" },
             React.createElement("h2", null, "Rechercher")),
@@ -31612,8 +31632,14 @@ var SearchBoard = function () {
             &&
                 React.createElement("div", null,
                     React.createElement("div", { id: 'agent-name' },
-                        React.createElement("h4", null, agent.compte + '/' + agent.cle),
-                        React.createElement("h4", null, agent.nom + ' ' + agent.prenom)),
+                        React.createElement("hr", null),
+                        React.createElement("h4", null,
+                            "N\u00B0 du Compte : ",
+                            React.createElement("b", null, agent.compte + '/' + agent.cle)),
+                        React.createElement("h4", null,
+                            "Nom et Pr\u00E9nom : ",
+                            React.createElement("b", null, agent.nom + ' ' + agent.prenom)),
+                        React.createElement("hr", null)),
                     React.createElement("div", { className: "scrollable-table" },
                         React.createElement("div", { className: "table", id: "month-table" },
                             React.createElement("ul", { id: "table-compte-nom" },
@@ -31628,7 +31654,15 @@ var SearchBoard = function () {
                             React.createElement("ul", { id: "table-item-standard-details" }, debts.map(function (debt) { return (React.createElement("li", { key: debt.pid }, NumberUtils.formatNumberToCurrency(debt.montant_global))); })),
                             React.createElement("ul", { id: "table-item-total" },
                                 React.createElement("li", null, calculateTotalDebts()))),
-                        monthNumbers.map(function (monthNumber) { return (payments.length > 0 ? React.createElement(MonthPaymentsDetails_1["default"], { key: monthNumber, monthPayments: payments.filter(function (payment) { return payment.mois == monthNumber; }) }) : ''); }))))));
+                        monthNumbers.map(function (monthNumber) { return (payments.length > 0 ? React.createElement(MonthPaymentsDetails_1["default"], { key: monthNumber, monthPayments: payments.filter(function (payment) { return payment.mois == monthNumber; }) }) : ''); }),
+                        React.createElement("div", { className: "table-item", id: "month-table" },
+                            React.createElement("ul", { id: "table-item-compte-nom" },
+                                React.createElement("li", { id: "nom" },
+                                    React.createElement("h4", null, "Total"))),
+                            React.createElement("ul", { id: "table-item-standard-details" }, partners.map(function (partner) { return (React.createElement("li", { key: partner.pid }, calculatePartnerTotal(partner))); })),
+                            React.createElement("ul", { id: "table-item-total" },
+                                React.createElement("li", null,
+                                    React.createElement("h4", null, calculateGlobalTotal())))))))));
 };
 exports.default = SearchBoard;
 
@@ -32130,7 +32164,7 @@ exports.DB_OP_FAILURE = "DB_OP_FAILURE";
 "use strict";
 
 exports.__esModule = true;
-exports.getMonthInNumber = exports.getMonthInLetters = exports.currentMonth = exports.currentYear = exports.getCurrentTime = void 0;
+exports.getMonthInNumber = exports.getMonthInUIFrench = exports.getMonthInLetters = exports.currentMonth = exports.currentYear = exports.getCurrentTime = void 0;
 var date = new Date();
 var getCurrentTime = function () {
     var now = new Date();
@@ -32170,6 +32204,35 @@ var getMonthInLetters = function (monthNumber) {
     }
 };
 exports.getMonthInLetters = getMonthInLetters;
+var getMonthInUIFrench = function (monthNumber) {
+    switch (monthNumber) {
+        case 1:
+            return 'Janvier';
+        case 2:
+            return 'Février';
+        case 3:
+            return 'Mars';
+        case 4:
+            return 'Avril';
+        case 5:
+            return 'Mai';
+        case 6:
+            return 'Juin';
+        case 7:
+            return 'Juillet';
+        case 8:
+            return 'Aout';
+        case 9:
+            return 'Septembre';
+        case 10:
+            return 'Octobre';
+        case 11:
+            return 'Novembre';
+        default:
+            return 'Décembre';
+    }
+};
+exports.getMonthInUIFrench = getMonthInUIFrench;
 var getMonthInNumber = function (monthLetter) {
     switch (monthLetter) {
         case 'january':
@@ -32214,14 +32277,8 @@ exports.getMonthInNumber = getMonthInNumber;
 exports.__esModule = true;
 exports.formatNumberToCurrency = void 0;
 var formatNumberToCurrency = function (number) {
-    var formatter = new Intl.NumberFormat('fr-FR', {
-        style: 'currency',
-        currency: 'DIN',
-        // These options are needed to round to whole numbers if that's what you want.
-        //minimumFractionDigits: 2, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
-        //maximumFractionDigits: 3, // (causes 2500.99 to be printed as $2,501)
-    });
-    return formatter.format(number);
+    var formatter = new Intl.NumberFormat('en-US');
+    return formatter.format(number).replace(' ', ',') + '.00';
 };
 exports.formatNumberToCurrency = formatNumberToCurrency;
 

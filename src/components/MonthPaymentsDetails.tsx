@@ -17,7 +17,7 @@ const MonthPaymentsDetails = ({ monthPayments }) => {
     return (
         <div className="table-item" id="month-table">
             <ul id="table-item-compte-nom">
-                <li id="nom">{DateUtils.getMonthInLetters(monthPayments[0].mois)}</li>
+                <li id="nom">{DateUtils.getMonthInUIFrench(monthPayments[0].mois)}</li>
             </ul>
             <ul id="table-item-standard-details">
                 {

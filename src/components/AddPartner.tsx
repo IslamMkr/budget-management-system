@@ -1,22 +1,36 @@
 import closeIcon from './../images/close_white.svg'
 import React = require('react')
 import { useState } from 'react'
-import { ipcRenderer } from 'electron'
-import * as Constants from './../utils/constants'
 import * as DateUtils from './../utils/date'
 import * as database from './../database'
 
+/**
+ * A component that manages the new adding of partners to the database
+ * 
+ * @param isVisible : component visibility
+ * @param notifyPartnerDataChanged : listener for new records adding
+ * @returns AddPartner view 
+ */
 const AddPartner = ({ isVisible, notifyPartnersDataChanged }) => {
-    const [partnerName, setPartnerName] = useState("")
+    const [partnerName, setPartnerName] = useState("") // Partner name text input state
     
+    // States for success & error managment
     const [successMessageVisibility, setSuccessMessageVisibility] = useState(false)
     const [failureMessageVisibility, setFailureMessageVisibility] = useState(false)
     const [errorStringIsEmpty, setErrorStringIsEmpty] = useState(false)
 
+    /**
+     * Hiding the component
+     * Making it invisible
+     */
     const addPartnerCloseHandler = () => {
         isVisible(false)
     }
 
+    /**
+     * Handling the add partner request from user
+     * Checking the input validity & making the database request
+     */
     const handleAddPartner = () => {
         setSuccessMessageVisibility(false)
         setFailureMessageVisibility(false)
@@ -36,10 +50,10 @@ const AddPartner = ({ isVisible, notifyPartnersDataChanged }) => {
                     notifyPartnersDataChanged()
                 })
                 .catch(err => {
-                    notifyUserPartnerAddFailed()
+                    setFailureMessageVisibility(true)
                 })
         } else {
-            notifyUserStringIsEmpty()
+            setErrorStringIsEmpty(true)
         }
     }
 
@@ -52,10 +66,9 @@ const AddPartner = ({ isVisible, notifyPartnersDataChanged }) => {
     //     }
     // })
 
-    const notifyUserPartnerAddFailed = () => {
-        setFailureMessageVisibility(true)
-    }
-
+    /**
+	 * Notifying the parent views that a new record is added & new data is available
+	 */
     const notifyUserPartnerAddedSuccessfuly = () => {
         setSuccessMessageVisibility(true)
 
@@ -72,10 +85,6 @@ const AddPartner = ({ isVisible, notifyPartnersDataChanged }) => {
         }
 
         interval = setInterval(increment, 1000)
-    }
-
-    const notifyUserStringIsEmpty = () => {
-        setErrorStringIsEmpty(true)
     }
 
     return (

@@ -30870,21 +30870,40 @@ var PropTypes = __webpack_require__(/*! prop-types */ "./node_modules/prop-types
 var DateUtils = __webpack_require__(/*! ./../utils/date */ "./src/utils/date.ts");
 var useState = __webpack_require__(/*! react */ "./node_modules/react/index.js").useState;
 var database = __webpack_require__(/*! ./../database */ "./src/database.ts");
+/**
+ * A component that manages the new adding of agents to the database
+ *
+ * @param isVisible : component visibility
+ * @param notifyDataChanged : listener for new records adding
+ * @returns AddAgent view
+ */
 var AddAgent = function (_a) {
     var isVisible = _a.isVisible, notifyDataChanged = _a.notifyDataChanged;
-    var _b = useState(""), compte = _b[0], setCompte = _b[1];
-    var _c = useState(""), cle = _c[0], setCle = _c[1];
-    var _d = useState(""), nom = _d[0], setNom = _d[1];
-    var _e = useState(""), prenom = _e[0], setPrenom = _e[1];
-    var _f = useState(""), poste = _f[0], setPoste = _f[1];
+    var _b = useState(""), compte = _b[0], setCompte = _b[1]; // Account number text input state
+    var _c = useState(""), cle = _c[0], setCle = _c[1]; // Account key number text input state
+    var _d = useState(""), nom = _d[0], setNom = _d[1]; // Name text input state
+    var _e = useState(""), prenom = _e[0], setPrenom = _e[1]; // Surname text input state
+    var _f = useState(""), poste = _f[0], setPoste = _f[1]; // Job text input state
+    // States to manage success & error messages 
     var _g = useState(false), successMessageVisibility = _g[0], setSuccessMessageVisibility = _g[1];
     var _h = useState(false), failureMessageVisibility = _h[0], setFailureMessageVisibility = _h[1];
+    /**
+     * Hide the component
+     * Making the component invisible
+     */
     var addAgentCloseHandler = function () {
         isVisible(false);
     };
+    /**
+     * Handling the add agent request from user
+     * Checking input validity & adding record to database
+     */
     var handleAddAgent = function () {
         setSuccessMessageVisibility(false);
         setFailureMessageVisibility(false);
+        /**
+         * TODO: Check input text validity before adding it to database
+         */
         var agent = {
             compte: String(compte),
             cle: String(cle),
@@ -30893,17 +30912,19 @@ var AddAgent = function (_a) {
             poste: String(poste),
             timestamp: DateUtils.getCurrentTime()
         };
+        // Making the database operation
+        // Adding agent 
         database.addAgent(agent)
             .then(function (_) {
             notifyUserAgentAddedSuccessfuly();
             clearInput();
         })["catch"](function (err) {
-            notifyUserAddFailed();
+            setFailureMessageVisibility(true);
         });
     };
-    var notifyUserAddFailed = function () {
-        setFailureMessageVisibility(true);
-    };
+    /**
+     * Clearing input text
+     */
     var clearInput = function () {
         setCompte("");
         setCle("");
@@ -30911,15 +30932,20 @@ var AddAgent = function (_a) {
         setPrenom("");
         setPoste("");
     };
+    /**
+     * Notifying the parent views that a new record is added & new data is available
+     */
     var notifyUserAgentAddedSuccessfuly = function () { return __awaiter(void 0, void 0, void 0, function () {
         var seconds, interval, increment;
         return __generator(this, function (_a) {
             setSuccessMessageVisibility(true);
+            // Notifying the parent view that data changed
+            // New record available
             notifyDataChanged();
             seconds = 0;
             increment = function () {
                 seconds += 1;
-                console.log(seconds);
+                //console.log(seconds)
                 if (seconds == 3) {
                     clearInterval(interval);
                     setSuccessMessageVisibility(false);
@@ -30983,15 +31009,31 @@ var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var react_1 = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var DateUtils = __webpack_require__(/*! ./../utils/date */ "./src/utils/date.ts");
 var database = __webpack_require__(/*! ./../database */ "./src/database.ts");
+/**
+ * A component that manages the new adding of partners to the database
+ *
+ * @param isVisible : component visibility
+ * @param notifyPartnerDataChanged : listener for new records adding
+ * @returns AddPartner view
+ */
 var AddPartner = function (_a) {
     var isVisible = _a.isVisible, notifyPartnersDataChanged = _a.notifyPartnersDataChanged;
-    var _b = (0, react_1.useState)(""), partnerName = _b[0], setPartnerName = _b[1];
+    var _b = (0, react_1.useState)(""), partnerName = _b[0], setPartnerName = _b[1]; // Partner name text input state
+    // States for success & error managment
     var _c = (0, react_1.useState)(false), successMessageVisibility = _c[0], setSuccessMessageVisibility = _c[1];
     var _d = (0, react_1.useState)(false), failureMessageVisibility = _d[0], setFailureMessageVisibility = _d[1];
     var _e = (0, react_1.useState)(false), errorStringIsEmpty = _e[0], setErrorStringIsEmpty = _e[1];
+    /**
+     * Hiding the component
+     * Making it invisible
+     */
     var addPartnerCloseHandler = function () {
         isVisible(false);
     };
+    /**
+     * Handling the add partner request from user
+     * Checking the input validity & making the database request
+     */
     var handleAddPartner = function () {
         setSuccessMessageVisibility(false);
         setFailureMessageVisibility(false);
@@ -31008,11 +31050,11 @@ var AddPartner = function (_a) {
                 setPartnerName("");
                 notifyPartnersDataChanged();
             })["catch"](function (err) {
-                notifyUserPartnerAddFailed();
+                setFailureMessageVisibility(true);
             });
         }
         else {
-            notifyUserStringIsEmpty();
+            setErrorStringIsEmpty(true);
         }
     };
     // ipcRenderer.on(Constants.DB_RESPONSE_ADD_PARTNER, (_, message) => {
@@ -31023,9 +31065,9 @@ var AddPartner = function (_a) {
     //         notifyUserPartnerAddFailed()
     //     }
     // })
-    var notifyUserPartnerAddFailed = function () {
-        setFailureMessageVisibility(true);
-    };
+    /**
+     * Notifying the parent views that a new record is added & new data is available
+     */
     var notifyUserPartnerAddedSuccessfuly = function () {
         setSuccessMessageVisibility(true);
         var seconds = 0;
@@ -31039,9 +31081,6 @@ var AddPartner = function (_a) {
             }
         };
         interval = setInterval(increment, 1000);
-    };
-    var notifyUserStringIsEmpty = function () {
-        setErrorStringIsEmpty(true);
     };
     return (React.createElement("div", { className: "form-add-agent" },
         React.createElement("div", { className: "add-agent-title" },
@@ -31075,6 +31114,12 @@ exports.default = AddPartner;
 exports.__esModule = true;
 var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 var PropTypes = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+/**
+ * Agent item view
+ *
+ * @param agent : agent object
+ * @returns Agent view
+ */
 var Agent = function (_a) {
     var agent = _a.agent;
     return (React.createElement("div", { className: "table-item" },
@@ -31248,6 +31293,7 @@ var MonthDetailBoard_1 = __webpack_require__(/*! ./MonthDetailBoard */ "./src/co
 var SearchBoard_1 = __webpack_require__(/*! ./SearchBoard */ "./src/components/SearchBoard.tsx");
 var SettingsBoard_1 = __webpack_require__(/*! ./SettingsBoard */ "./src/components/SettingsBoard.tsx");
 var TransactionsBoard_1 = __webpack_require__(/*! ./TransactionsBoard */ "./src/components/TransactionsBoard.tsx");
+var PaidAgentsBoard_1 = __webpack_require__(/*! ./PaidAgentsBoard */ "./src/components/PaidAgentsBoard.tsx");
 var Content = function (_a) {
     var visibleContent = _a.visibleContent;
     var disconnect = function () {
@@ -31257,7 +31303,8 @@ var Content = function (_a) {
             : (visibleContent == "Rechercher" ? React.createElement(SearchBoard_1["default"], null)
                 : (visibleContent == "Paramètres" ? React.createElement(SettingsBoard_1["default"], null)
                     : (visibleContent == "Transactions" ? React.createElement(TransactionsBoard_1["default"], null)
-                        : React.createElement("div", null)))))));
+                        : (visibleContent == "Agents soldés" ? React.createElement(PaidAgentsBoard_1["default"], null)
+                            : React.createElement("div", null))))))));
 };
 exports.default = Content;
 
@@ -31446,6 +31493,26 @@ var MonthPaymentsDetails = function (_a) {
             React.createElement("li", null, calculateTotalMonthPayment()))));
 };
 exports.default = MonthPaymentsDetails;
+
+
+/***/ }),
+
+/***/ "./src/components/PaidAgentsBoard.tsx":
+/*!********************************************!*\
+  !*** ./src/components/PaidAgentsBoard.tsx ***!
+  \********************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+exports.__esModule = true;
+var React = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var PaidAgentsBoard = function () {
+    return (React.createElement("div", { className: "board" },
+        React.createElement("div", { className: "page-title" },
+            React.createElement("h2", null, "Agents sold\u00E9s"))));
+};
+exports.default = PaidAgentsBoard;
 
 
 /***/ }),

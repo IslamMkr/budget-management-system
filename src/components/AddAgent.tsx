@@ -5,23 +5,44 @@ import * as DateUtils from './../utils/date'
 const { useState } = require("react")
 import * as database from './../database'
 
+/**
+ * A component that manages the new adding of agents to the database
+ * 
+ * @param isVisible : component visibility
+ * @param notifyDataChanged : listener for new records adding
+ * @returns AddAgent view 
+ */
 const AddAgent = ({ isVisible, notifyDataChanged }) => {
-    const [compte, setCompte] = useState("")
-    const [cle, setCle] = useState("")
-    const [nom, setNom] = useState("")
-    const [prenom, setPrenom] = useState("")
-    const [poste, setPoste] = useState("")
+
+    const [compte, setCompte] = useState("") // Account number text input state
+    const [cle, setCle] = useState("") // Account key number text input state
+    const [nom, setNom] = useState("") // Name text input state
+    const [prenom, setPrenom] = useState("") // Surname text input state
+    const [poste, setPoste] = useState("") // Job text input state
     
+	// States to manage success & error messages 
     const [successMessageVisibility, setSuccessMessageVisibility] = useState(false)
     const [failureMessageVisibility, setFailureMessageVisibility] = useState(false)
 
+	/**
+	 * Hide the component
+	 * Making the component invisible
+	 */
     const addAgentCloseHandler = () => {
         isVisible(false)
     }
 
+	/**
+	 * Handling the add agent request from user
+	 * Checking input validity & adding record to database
+	 */
     const handleAddAgent = () => {
         setSuccessMessageVisibility(false)
         setFailureMessageVisibility(false)
+
+		/**
+		 * TODO: Check input text validity before adding it to database
+		 */
 
         const agent = {
             compte: String(compte),
@@ -32,20 +53,21 @@ const AddAgent = ({ isVisible, notifyDataChanged }) => {
             timestamp: DateUtils.getCurrentTime()
         }
         
+		// Making the database operation
+		// Adding agent 
         database.addAgent(agent)
             .then(_ => {
                 notifyUserAgentAddedSuccessfuly()
                 clearInput()
             })
             .catch(err => {
-                notifyUserAddFailed()
+				setFailureMessageVisibility(true)
             })
     }
 
-    const notifyUserAddFailed = () => {
-        setFailureMessageVisibility(true)
-    }
-
+	/**
+	 * Clearing input text
+	 */
     const clearInput = () => {
         setCompte("")
         setCle("")
@@ -54,8 +76,14 @@ const AddAgent = ({ isVisible, notifyDataChanged }) => {
         setPoste("")
     }
 
+	/**
+	 * Notifying the parent views that a new record is added & new data is available
+	 */
     const notifyUserAgentAddedSuccessfuly = async () => {
         setSuccessMessageVisibility(true)
+
+		// Notifying the parent view that data changed
+		// New record available
         notifyDataChanged()
 
         let seconds = 0
@@ -63,7 +91,7 @@ const AddAgent = ({ isVisible, notifyDataChanged }) => {
 
         const increment = () => {
             seconds += 1
-            console.log(seconds)
+            //console.log(seconds)
             if (seconds == 3) {
                 clearInterval(interval)
                 setSuccessMessageVisibility(false)

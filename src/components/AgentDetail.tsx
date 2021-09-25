@@ -4,7 +4,7 @@ import * as NumberUtils from './../utils/numbers'
 const AgentDetail = ({ agent, payments }) => {
 
     const calculateTotal = () => {
-        const total = payments.reduce((acc, payment) => acc + payment.montant, 0)
+        const total = payments.reduce((acc, payment: { montant }) => acc + payment.montant, 0)
         return NumberUtils.formatNumberToCurrency(total)
     }
 

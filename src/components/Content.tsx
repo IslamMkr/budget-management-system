@@ -4,6 +4,7 @@ import MonthDetailBoard from "./MonthDetailBoard"
 import SearchBoard from "./SearchBoard"
 import SettingsBoard from "./SettingsBoard"
 import TransactionsBoard from "./TransactionsBoard"
+import PaidAgentsBoard from './PaidAgentsBoard'
 
 
 const Content = ({ visibleContent }) => {
@@ -16,11 +17,12 @@ const Content = ({ visibleContent }) => {
         <div className="content">
             {
                 visibleContent == "Agents" ? <AgentsBoard />
-                : (visibleContent == "Détails du mois" ? <MonthDetailBoard />
-                : (visibleContent == "Rechercher" ? <SearchBoard />
-                : (visibleContent == "Paramètres" ? <SettingsBoard />
-                : (visibleContent == "Transactions" ? <TransactionsBoard /> 
-                : <div></div> ))))
+                : ( visibleContent == "Détails du mois" ? <MonthDetailBoard />
+                : ( visibleContent == "Rechercher" ? <SearchBoard />
+                : ( visibleContent == "Paramètres" ? <SettingsBoard />
+                : ( visibleContent == "Transactions" ? <TransactionsBoard /> 
+                : ( visibleContent == "Agents soldés" ? <PaidAgentsBoard /> 
+                : <div></div> )))))
             }
         </div>
     )

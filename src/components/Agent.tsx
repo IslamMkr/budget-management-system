@@ -1,6 +1,12 @@
 import React = require("react")
 import PropTypes = require('prop-types')
 
+/**
+ * Agent item view 
+ * 
+ * @param agent : agent object
+ * @returns Agent view
+ */
 const Agent = ({ agent }) => {
     return (
         <div className="table-item">
